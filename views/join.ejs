@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8" />
+<title></title>
+</head>
+<body>
+    <h1>동영상 등록</h1>
+    <form method="post" action="/registerVideo">
+        <fieldset>
+        <legend>동영상 등록 양식</legend>
+            <ul>
+                <li>
+                    <label for="vurl">동영상 url입력 또는 파일 등록</label>
+                    <input type="text" name="vurl" id="vurl" title="동영상 url입력"/>
+                    <input type="file" name="vfile" title="동영상 파일 등록"/>
+                </li>
+                <li>
+                    <label for="vname">동영상 제목</label>
+                    <input type="text" name="vname" id="vname" />
+                </li>
+                <li>
+                    <label for="vdesc">동영상 내용</label>
+                    <input type="text" name="vdesc" id="vdesc" />
+                </li>
+                <li>
+                    <input type="submit" value="등록" />
+                </li>
+            </ul>
+        </fieldset>
+    </form>
+</body>
+</html>
