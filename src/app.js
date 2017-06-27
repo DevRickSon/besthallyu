@@ -84,6 +84,55 @@ app.post('/registerVideo', (req, res) => {
          .catch(onError);
 });
 
+app.get('/lists/:page', (req, res) => {
+    const page = (req.params.page === 'undefined') ? 1 : parseInt(req.params.page, 10);
+    const query = req.query;
+
+    let pagenation = null;
+
+    const getPagenation = (total) => {
+        pagenation = Board.getPagenation(page, total);
+
+        return Promise.resolve(false);
+    };
+
+    const getList = () => {
+        return Board.getList(query, pagenation);
+    };
+
+    const respond = (boards) => {
+        // res.json({
+        //     boards: boards,
+        //     pagenation: pagenation,
+        //     success: true
+        // });
+
+        req.app.render('list', {
+            boards: boards,
+            pagenation: pagenation,
+            success: true
+        },(err, html) => {
+            if(err) throw err;
+
+            res.end(html);
+        });
+    };
+
+    const onError = (err) => {
+        res.status(409).json({
+            success: false,
+            error: err,
+            message: err.message
+        });
+    };
+
+    Board.getTotal(query)
+         .then(getPagenation)
+         .then(getList)
+         .then(respond)
+         .catch(onError);
+});
+
 //에러 핸들러 등록
 //인피니티 라이브
 

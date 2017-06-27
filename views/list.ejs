@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8" />
+<title></title>
+</head>
+<body>
+    <h1></h1>
+    <table>
+        <caption></caption>
+        <thead>
+            <th scope="col">번호</th>
+            <th scope="col">url</th>
+            <th scope="col">파일</th>
+            <th scope="col">컨텐츠명</th>
+            <th scope="col">원본</th>
+            <th scope="col">이름</th>
+            <th scope="col">국적</th>
+            <th scope="col">sns</th>
+            <th scope="col">이메일</th>
+            <th scope="col">방문수</th>
+            <th scope="col">여권</th>
+            <th scope="col">비자</th>
+            <th scope="col">결격사유</th>
+            <th scope="col">등록시간</th>
+        </thead>
+        <tbody>
+            <%
+                for(var i=0; i<boards.length; i++){
+                    var board = boards[i];
+
+                    var d = new Date(board.date),
+                        y = d.getFullYear(),
+                        m = d.getMonth() + 1,
+                        dy = d.getDate(),
+                        h = d.getHours(),
+                        mn = d.getMinutes(),
+                        s = d.getSeconds();
+
+                    if(m < 10) m = '0' + m;
+                    if(dy < 10) dy = '0' + dy;
+                    if(h < 10) h = '0' + h;
+                    if(mn < 10) mn = '0' + mn;
+                    if(s < 10) s = '0' + s;
+
+                    var time = y + '/' + m + '/' + dy + ' ' + h + ':' + m + ':' + s;
+            %>
+            <tr>
+                <td><%= board.num %></td>
+                <td><%= board.vurl %></td>
+                <td><%= board.vfile %></td>
+                <td><%= board.vname %></td>
+                <td><%= board.vorigin %></td>
+                <td><%= board.uname %></td>
+                <td><%= board.unation %></td>
+                <td><%= board.usns %></td>
+                <td><%= board.uemail %></td>
+                <td><%= board.uvisit %></td>
+                <td><%= board.upassport %></td>
+                <td><%= board.uvisa %></td>
+                <td><%= board.ucancel %></td>
+                <td><%= time %></td>
+            </tr>
+            <% } %>
+        </tbody>
+    </table>
+    <p>
+        <% if(pagenation.prevPage > -1){ %>
+            <a href="/lists/<%= pagenation.prevPage %>">prev</a>
+        <% } %>
+
+        <%
+            for(var i=pagenation.startPage; i<=pagenation.endPage; i++){
+                if(i === pagenation.current){
+        %>
+            <span class="on"><%= i %></span>
+        <%
+                }else{
+        %>
+            <a href="/lists/<%= i %>"><%= i %></a>
+        <%
+                }
+            }
+        %>
+
+        <% if(pagenation.nextPage > -1){ %>
+            <a href="/lists/<%= pagenation.nextPage %>">next</a>
+        <% } %>
+    </p>
+</body>
+</html>
