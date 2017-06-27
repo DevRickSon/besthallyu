@@ -5,28 +5,87 @@
 <title></title>
 </head>
 <body>
-    <h1>동영상 등록</h1>
+    <h1></h1>
     <form method="post" action="/registerVideo">
         <fieldset>
-        <legend>동영상 등록 양식</legend>
+        <legend></legend>
             <ul>
                 <li>
-                    <label for="vurl">동영상 url입력 또는 파일 등록</label>
-                    <input type="text" name="vurl" id="vurl" title="동영상 url입력"/>
-                    <input type="file" name="vfile" title="동영상 파일 등록"/>
+                    <label for="vurl">url or file</label>
+                    <input type="text" name="vurl" id="vurl" title=""/>
+                    <input type="file" name="vfile" title=""/>
                 </li>
                 <li>
-                    <label for="vname">동영상 제목</label>
+                    <label for="vname">input_a</label></label>
                     <input type="text" name="vname" id="vname" />
                 </li>
                 <li>
-                    <label for="vdesc">동영상 내용</label>
-                    <input type="text" name="vdesc" id="vdesc" />
+                    <label for="vorigin">input_b</label>
+                    <input type="text" name="vorigin" id="vorigin" />
                 </li>
                 <li>
-                    <input type="submit" value="등록" />
+                    <label for="ufirst">input_c</label>
+                    <input type="text" name="ufirst" id="ufirst" />
+                    <input type="text" name="ulast" />
+                </li>
+                <li>
+                    <label for="unation">input_d</label>
+                    <input type="text" name="unation" id="unation" />
+                </li>
+                <li>
+                    <label for="usns1">input_e</label>
+                    <input type="text" name="usns1" id="usns1" />
+                    <input type="text" name="usns2" />
+                </li>
+                <li>
+                    <label for="uemail">input_b</label>
+                    <input type="text" name="uemail" id="uemail" />
+                </li>
+                <li>
+                    <span>radio_a</span>
+                    <input type="radio" name="uvisit" id="uvisit1" value="1" />
+                    <label for="uvisit1">1</label>
+                    <input type="radio" name="uvisit" id="uvisit2" value="2" />
+                    <label for="uvisit2">2</label>
+                    <input type="radio" name="uvisit" id="uvisit3" value="3" />
+                    <label for="uvisit3">3</label>
+                    <input type="radio" name="uvisit" id="uvisit4" value="4" />
+                    <label for="uvisit4">4</label>
+                </li>
+                <li>
+                    <span>radio_a</span>
+                    <input type="radio" name="upassport" id="upassport1" value="1" />
+                    <label for="upassport1">1</label>
+                    <input type="radio" name="upassport" id="upassport2" value="2" />
+                    <label for="upassport2">2</label>
+                </li>
+                <li>
+                    <span>radio_a</span>
+                    <input type="radio" name="uvisa" id="uvisa1" value="1" />
+                    <label for="uvisa1">1</label>
+                    <input type="radio" name="uvisa" id="uvisa2" value="2" />
+                    <label for="uvisa2">2</label>
+                    <input type="radio" name="uvisa" id="uvisa3" value="3" />
+                    <label for="uvisa3">3</label>
+                </li>
+                <li>
+                    <span>radio_d</span>
+                    <input type="radio" name="ucancel" id="ucancel1" value="1" />
+                    <label for="ucancel1">1</label>
+                    <input type="radio" name="ucancel" id="ucancel2" value="2" />
+                    <label for="ucancel2">2</label>
+                    <input type="radio" name="ucancel" id="ucancel3" value="3" />
+                    <label for="ucancel3">3</label>
                 </li>
             </ul>
+            <div>
+                <p>blah blah blah</p>
+                <p>
+                    <input type="checkbox" name="agree" id="agree" />
+                    <label for="agree">yes</label>
+                </p>
+            </div>
+            <p><input type="submit" value="submit" /></p>
         </fieldset>
     </form>
 </body>
