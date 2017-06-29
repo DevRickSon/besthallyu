@@ -36,7 +36,7 @@ var app = (0, _express2.default)();
 
 //import localConfig from '../localConfig';
 
-var port = 3000;
+var port = 8083;
 
 //app.use(morgan('dev'));
 
@@ -124,8 +124,52 @@ app.post('/registerVideo', function (req, res) {
     _Board2.default.create(vurl, vfile, vname, vorigin, uname, unation, usns, uemail, uvisit, upassport, uvisa, ucancel).then(respond).catch(onError);
 });
 
+app.get('/lists', function (req, res) {
+    var query = req.query;
+
+    var pagenation = null;
+
+    var getPagenation = function getPagenation(total) {
+        pagenation = _Board2.default.getPagenation(1, total);
+
+        return Promise.resolve(false);
+    };
+
+    var getList = function getList() {
+        return _Board2.default.getList(query, pagenation);
+    };
+
+    var respond = function respond(boards) {
+        // res.json({
+        //     boards: boards,
+        //     pagenation: pagenation,
+        //     success: true
+        // });
+
+        req.app.render('list', {
+            boards: boards,
+            pagenation: pagenation,
+            success: true
+        }, function (err, html) {
+            if (err) throw err;
+
+            res.end(html);
+        });
+    };
+
+    var onError = function onError(err) {
+        res.status(409).json({
+            success: false,
+            error: err,
+            message: err.message
+        });
+    };
+
+    _Board2.default.getTotal(query).then(getPagenation).then(getList).then(respond).catch(onError);
+});
+
 app.get('/lists/:page', function (req, res) {
-    var page = typeof req.params.page === 'undefined' ? 1 : parseInt(req.params.page, 10);
+    var page = parseInt(req.params.page, 10);
     var query = req.query;
 
     var pagenation = null;

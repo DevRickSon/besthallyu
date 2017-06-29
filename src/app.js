@@ -12,7 +12,7 @@ import Board from './models/Board';
 import herokuConfig from '../herokuConfig'
 
 const app = express();
-const port = 3000;
+const port = 8083;
 
 //app.use(morgan('dev'));
 
@@ -87,8 +87,56 @@ app.post('/registerVideo', (req, res) => {
          .catch(onError);
 });
 
+app.get('/lists', (req, res) => {
+    const query = req.query;
+
+    let pagenation = null;
+
+    const getPagenation = (total) => {
+        pagenation = Board.getPagenation(1, total);
+
+        return Promise.resolve(false);
+    };
+
+    const getList = () => {
+        return Board.getList(query, pagenation);
+    };
+
+    const respond = (boards) => {
+        // res.json({
+        //     boards: boards,
+        //     pagenation: pagenation,
+        //     success: true
+        // });
+
+        req.app.render('list', {
+            boards: boards,
+            pagenation: pagenation,
+            success: true
+        },(err, html) => {
+            if(err) throw err;
+
+            res.end(html);
+        });
+    };
+
+    const onError = (err) => {
+        res.status(409).json({
+            success: false,
+            error: err,
+            message: err.message
+        });
+    };
+
+    Board.getTotal(query)
+         .then(getPagenation)
+         .then(getList)
+         .then(respond)
+         .catch(onError);
+});
+
 app.get('/lists/:page', (req, res) => {
-    const page = (typeof req.params.page === 'undefined') ? 1 : parseInt(req.params.page, 10);
+    const page = parseInt(req.params.page, 10);
     const query = req.query;
 
     let pagenation = null;
