@@ -8,6 +8,9 @@ import Board from './models/Board';
 
 import morgan from 'morgan';
 
+//import localConfig from '../localConfig';
+import herokuConfig from '../herokuConfig'
+
 const app = express();
 const port = 8083;
 
@@ -24,7 +27,7 @@ db.on('error', console.error);
 db.once('open', () => {
     console.log('Connected to mongodb server');
 });
-mongoose.connect('mongodb://jhson:wjdgh031952@ds139242.mlab.com:39242/vsdb');
+mongoose.connect(herokuConfig.db);
 
 app.use('/', express.static(path.join(__dirname, '../static')));
 

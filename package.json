@@ -4,8 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "node server",
-    "build": "babel app.js --out-file server.js",
+    "start": "node ./dist/app",
+    "build": "babel src -d dist",
     "dev": "nodemon --exec babel-node ./src/app --watch"
   },
   "repository": {
