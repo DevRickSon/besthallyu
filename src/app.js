@@ -88,7 +88,7 @@ app.post('/registerVideo', (req, res) => {
 });
 
 app.get('/lists/:page', (req, res) => {
-    const page = (req.params.page === 'undefined') ? 1 : parseInt(req.params.page, 10);
+    const page = (typeof req.params.page === 'undefined') ? 1 : parseInt(req.params.page, 10);
     const query = req.query;
 
     let pagenation = null;
