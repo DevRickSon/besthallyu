@@ -174,6 +174,6 @@ app.get('/lists/:page', function (req, res) {
 //에러 핸들러 등록
 //인피니티 라이브
 
-app.listen(port, function () {
-    console.log('Server is running on port ' + port + '.');
+app.listen(process.env.PORT || port, function () {
+    console.log('Server is running....');
 });
