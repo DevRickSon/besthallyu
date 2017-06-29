@@ -12,7 +12,7 @@ import morgan from 'morgan';
 import herokuConfig from '../herokuConfig'
 
 const app = express();
-const port = process.env.PORT || 8083;
+const port = 3000;
 
 app.use(morgan('dev'));
 
@@ -139,6 +139,6 @@ app.get('/lists/:page', (req, res) => {
 //에러 핸들러 등록
 //인피니티 라이브
 
-app.listen(port, () => {
+app.listen(process.env.PORT || port, () => {
     console.log(`Server is running on port ${port}.`);
 });
