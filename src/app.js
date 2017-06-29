@@ -6,7 +6,7 @@ import ejs from 'ejs';
 import mongoose from 'mongoose';
 import Board from './models/Board';
 
-import morgan from 'morgan';
+//import morgan from 'morgan';
 
 //import localConfig from '../localConfig';
 import herokuConfig from '../herokuConfig'
@@ -14,7 +14,7 @@ import herokuConfig from '../herokuConfig'
 const app = express();
 const port = 3000;
 
-app.use(morgan('dev'));
+//app.use(morgan('dev'));
 
 app.use(bodyParser.urlencoded({extended:true}));
 app.use(bodyParser.json());

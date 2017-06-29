@@ -24,10 +24,6 @@ var _Board = require('./models/Board');
 
 var _Board2 = _interopRequireDefault(_Board);
 
-var _morgan = require('morgan');
-
-var _morgan2 = _interopRequireDefault(_morgan);
-
 var _herokuConfig = require('../herokuConfig');
 
 var _herokuConfig2 = _interopRequireDefault(_herokuConfig);
@@ -36,11 +32,13 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
 var app = (0, _express2.default)();
 
+//import morgan from 'morgan';
+
 //import localConfig from '../localConfig';
 
-var port = process.env.PORT || 8083;
+var port = 3000;
 
-app.use((0, _morgan2.default)('dev'));
+//app.use(morgan('dev'));
 
 app.use(_bodyParser2.default.urlencoded({ extended: true }));
 app.use(_bodyParser2.default.json());
@@ -175,5 +173,5 @@ app.get('/lists/:page', function (req, res) {
 //인피니티 라이브
 
 app.listen(process.env.PORT || port, function () {
-    console.log('Server is running....');
+    console.log('Server is running on port ' + port + '.');
 });
