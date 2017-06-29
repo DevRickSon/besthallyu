@@ -28,10 +28,17 @@ var _morgan = require('morgan');
 
 var _morgan2 = _interopRequireDefault(_morgan);
 
+var _herokuConfig = require('../herokuConfig');
+
+var _herokuConfig2 = _interopRequireDefault(_herokuConfig);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 var app = (0, _express2.default)();
-var port = 8083;
+
+//import localConfig from '../localConfig';
+
+var port = process.env.PORT || 8083;
 
 app.use((0, _morgan2.default)('dev'));
 
@@ -46,7 +53,7 @@ db.on('error', console.error);
 db.once('open', function () {
     console.log('Connected to mongodb server');
 });
-_mongoose2.default.connect('mongodb://jhson:wjdgh031952@ds139242.mlab.com:39242/vsdb');
+_mongoose2.default.connect(_herokuConfig2.default.db);
 
 app.use('/', _express2.default.static(_path2.default.join(__dirname, '../static')));
 

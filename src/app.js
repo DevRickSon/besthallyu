@@ -12,7 +12,7 @@ import morgan from 'morgan';
 import herokuConfig from '../herokuConfig'
 
 const app = express();
-const port = 8083;
+const port = process.env.PORT || 8083;
 
 app.use(morgan('dev'));
 
