@@ -3,89 +3,131 @@
 <head>
 <meta charset="utf-8" />
 <title></title>
+<link rel="stylesheet" type="text/css" href="/css/common.css" />
 </head>
 <body>
-    <h1></h1>
-    <table>
-        <caption></caption>
-        <thead>
-            <th scope="col">번호</th>
-            <th scope="col">url</th>
-            <th scope="col">파일</th>
-            <th scope="col">컨텐츠명</th>
-            <th scope="col">원본</th>
-            <th scope="col">이름</th>
-            <th scope="col">국적</th>
-            <th scope="col">sns</th>
-            <th scope="col">이메일</th>
-            <th scope="col">방문수</th>
-            <th scope="col">여권</th>
-            <th scope="col">비자</th>
-            <th scope="col">결격사유</th>
-            <th scope="col">등록시간</th>
-        </thead>
-        <tbody>
-            <%
-                for(var i=0; i<boards.length; i++){
-                    var board = boards[i];
+    <div class="wrap admin">
+        <div class="wrp_header">
+            <div class="header admin">
+                <h1>관리자 | 참여자 리스트 <span class="wrp_cnt">( 총 <span class="cnt"><%= pagenation.total %></span>건 )</span></h1>
+            </div>
+        </div>
+        <div class="container admin">
+            <table class="lists">
+                <caption>참여자 목록</caption>
+                <colgroup>
+                    <col width="3%" />
+                    <col width="9%" />
+                    <col width="9%" />
+                    <col width="9%" />
+                    <col width="9%" />
+                    <col width="9%" />
+                    <col width="9%" />
+                    <col width="9%" />
+                    <col width="9%" />
+                    <col width="4%" />
+                    <col width="4%" />
+                    <col width="4%" />
+                    <col width="4%" />
+                    <col width="7%" />
+                </colgroup>
+                <thead>
+                    <th scope="col">번호</th>
+                    <th scope="col">url</th>
+                    <th scope="col">파일</th>
+                    <th scope="col">컨텐츠명</th>
+                    <th scope="col">원본</th>
+                    <th scope="col">이름</th>
+                    <th scope="col">국적</th>
+                    <th scope="col">sns</th>
+                    <th scope="col">이메일</th>
+                    <th scope="col">방문수</th>
+                    <th scope="col">여권</th>
+                    <th scope="col">비자</th>
+                    <th scope="col">결격사유</th>
+                    <th scope="col">등록시간</th>
+                </thead>
+                <tbody>
+                    <%
+                        for(var i=0; i<boards.length; i++){
+                            var board = boards[i];
 
-                    var d = new Date(board.date),
-                        y = d.getFullYear(),
-                        m = d.getMonth() + 1,
-                        dy = d.getDate(),
-                        h = d.getHours(),
-                        mn = d.getMinutes(),
-                        s = d.getSeconds();
+                            var d = new Date(board.date),
+                                y = d.getFullYear(),
+                                m = d.getMonth() + 1,
+                                dy = d.getDate(),
+                                h = d.getHours(),
+                                mn = d.getMinutes(),
+                                s = d.getSeconds();
 
-                    if(m < 10) m = '0' + m;
-                    if(dy < 10) dy = '0' + dy;
-                    if(h < 10) h = '0' + h;
-                    if(mn < 10) mn = '0' + mn;
-                    if(s < 10) s = '0' + s;
+                            if(m < 10) m = '0' + m;
+                            if(dy < 10) dy = '0' + dy;
+                            if(h < 10) h = '0' + h;
+                            if(mn < 10) mn = '0' + mn;
+                            if(s < 10) s = '0' + s;
 
-                    var time = y + '/' + m + '/' + dy + ' ' + h + ':' + m + ':' + s;
-            %>
-            <tr>
-                <td><%= board.num %></td>
-                <td><%= board.vurl %></td>
-                <td><%= board.vfile %></td>
-                <td><%= board.vname %></td>
-                <td><%= board.vorigin %></td>
-                <td><%= board.uname %></td>
-                <td><%= board.unation %></td>
-                <td><%= board.usns %></td>
-                <td><%= board.uemail %></td>
-                <td><%= board.uvisit %></td>
-                <td><%= board.upassport %></td>
-                <td><%= board.uvisa %></td>
-                <td><%= board.ucancel %></td>
-                <td><%= time %></td>
-            </tr>
-            <% } %>
-        </tbody>
-    </table>
-    <p>
-        <% if(pagenation.prevPage > -1){ %>
-            <a href="/lists/<%= pagenation.prevPage %>">prev</a>
-        <% } %>
+                            var time = y + '/' + m + '/' + dy + ' ' + h + ':' + m + ':' + s;
+                    %>
+                    <tr>
+                        <td class="alc"><%= board.num %></td>
+                        <td><%= board.vurl %></td>
+                        <td><%= board.vfile %></td>
+                        <td><%= board.vname %></td>
+                        <td><%= board.vorigin %></td>
+                        <td><%= board.uname %></td>
+                        <td><%= board.unation %></td>
+                        <td><%= board.usns %></td>
+                        <td><%= board.uemail %></td>
+                        <td class="alc"><%= board.uvisit %></td>
+                        <td class="alc"><%= board.upassport %></td>
+                        <td class="alc"><%= board.uvisa %></td>
+                        <td class="alc"><%= board.ucancel %></td>
+                        <td class="alc"><%= time %></td>
+                    </tr>
+                    <% } %>
+                </tbody>
+            </table>
+            <p class="pagenation">
+                <% if(pagenation.prevPage > -1){ %>
+                    <a href="/lists/<%= pagenation.prevPage %>">&lt;</a>
+                <% } %>
 
-        <%
-            for(var i=pagenation.startPage; i<=pagenation.endPage; i++){
-                if(i === pagenation.current){
-        %>
-            <span class="on"><%= i %></span>
-        <%
-                }else{
-        %>
-            <a href="/lists/<%= i %>"><%= i %></a>
-        <%
-                }
-            }
-        %>
+                <%
+                    for(var i=pagenation.startPage; i<=pagenation.endPage; i++){
+                        if(i === pagenation.current){
+                %>
+                    <span class="on"><%= i %></span>
+                <%
+                        }else{
+                %>
+                    <a href="/lists/<%= i %>"><%= i %></a>
+                <%
+                        }
+                    }
+                %>
 
-        <% if(pagenation.nextPage > -1){ %>
-            <a href="/lists/<%= pagenation.nextPage %>">next</a>
-        <% } %>
-    </p>
+                <% if(pagenation.nextPage > -1){ %>
+                    <a href="/lists/<%= pagenation.nextPage %>">&gt;</a>
+                <% } %>
+            </p>
+            <div class="frm_search">
+                <form method="GET" action="/lists/<%= pagenation.current %>">
+                    <fieldset>
+                        <legend>참가자 검색 양식</legend>
+                        <select name="searchType">
+                            <option value="">검색종류</option>
+                            <option value="vname">컨텐츠명</option>
+                            <option value="vorigin">원본</option>
+                            <option value="uname">이름</option>
+                            <option value="unation">국적</option>
+                            <option value="uemail">이메일</option>
+                        </select>
+                        <input type="text" name="searchWord" />
+                        <input type="submit" value="검색" />
+                    </fieldset>
+                </form>
+            </div>
+        </div>
+    </div>
 </body>
 </html>

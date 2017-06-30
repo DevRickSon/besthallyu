@@ -32,13 +32,6 @@ mongoose.connect(herokuConfig.db);
 app.use('/', express.static(path.join(__dirname, '../static')));
 
 app.get('/', (req, res) => {
-    req.app.render('index', (err, html) => {
-        if(err) throw err;
-        res.end(html);
-    });
-});
-
-app.get('/join', (req, res) => {
     req.app.render('join', (err, html) => {
         if(err) throw err;
         res.end(html);
@@ -47,19 +40,6 @@ app.get('/join', (req, res) => {
 
 app.post('/registerVideo', (req, res) => {
     let { vurl, vfile, vname, vorigin, ufirst, ulast, unation, usns1, usns2, uemail, uvisit, upassport, uvisa, ucancel } = req.body;
-    console.log('url: ', vurl);
-    console.log('file: ', vfile);
-    console.log('vname: ', vname);
-    console.log('origin: ', vorigin);
-    console.log('name: ', ufirst, ' ', ulast);
-    console.log('unation: ', unation);
-    console.log('usns1: ', usns1);
-    console.log('usns2: ', usns2);
-    console.log('uemail: ', uemail);
-    console.log('uvisit: ', uvisit);
-    console.log('upassport: ', upassport);
-    console.log('uvisa: ', uvisa);
-    console.log('ucancel: ', ucancel);
     //유효성 체크
     //db insert
     //성공, 에러 페이지
@@ -87,7 +67,7 @@ app.post('/registerVideo', (req, res) => {
          .catch(onError);
 });
 
-app.get('/lists', (req, res) => {
+app.get('/admin/lists', (req, res) => {
     const query = req.query;
 
     let pagenation = null;
@@ -135,9 +115,21 @@ app.get('/lists', (req, res) => {
          .catch(onError);
 });
 
-app.get('/lists/:page', (req, res) => {
-    const page = parseInt(req.params.page, 10);
-    const query = req.query;
+app.get('/admin/lists/:page', (req, res) => {
+    let page = parseInt(req.params.page, 10);
+    let {searchType, searchWord} = req.query;
+
+    let query = {};
+    if(typeof searchType !== 'undefined' && searchType !== ''){
+        switch(searchType.toUpperCase()){
+            case 'VNAME':
+            case 'VORIGIN':
+                query[searchType] = {$regex: searchWord};
+                break;
+            default:
+                query[searchType] = searchWord;
+        }
+    }
 
     let pagenation = null;
 
@@ -186,6 +178,13 @@ app.get('/lists/:page', (req, res) => {
 
 //에러 핸들러 등록
 //인피니티 라이브
+
+app.get('/admin', function(req, res){
+    req.app.render('login', (err, html) => {
+        if(err) throw err;
+        res.end(html);
+    });
+});
 
 app.listen(process.env.PORT || port, () => {
     console.log(`Server is running on port ${port}.`);

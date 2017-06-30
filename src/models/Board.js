@@ -74,6 +74,7 @@ Board.statics.getPagenation = function(page, total){
     let nextPage = (endPage === totalPage) ? -1 : endPage + 1;
 
     pagenation.current = page;
+    pagenation.total = total;
     pagenation.startBoard = startBoard;
     pagenation.startPage = startPage;
     pagenation.endPage = endPage;
