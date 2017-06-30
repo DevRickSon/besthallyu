@@ -5,6 +5,7 @@ import ejs from 'ejs';
 
 import mongoose from 'mongoose';
 import Board from './models/Board';
+import Admin from './models/Admin';
 
 //import morgan from 'morgan';
 
@@ -91,8 +92,7 @@ app.get('/admin/lists', (req, res) => {
 
         req.app.render('list', {
             boards: boards,
-            pagenation: pagenation,
-            success: true
+            pagenation: pagenation
         },(err, html) => {
             if(err) throw err;
 
@@ -152,8 +152,7 @@ app.get('/admin/lists/:page', (req, res) => {
 
         req.app.render('list', {
             boards: boards,
-            pagenation: pagenation,
-            success: true
+            pagenation: pagenation
         },(err, html) => {
             if(err) throw err;
 
@@ -184,6 +183,86 @@ app.get('/admin', function(req, res){
         if(err) throw err;
         res.end(html);
     });
+});
+
+app.post('/admin/login', function(req, res){
+    const { uid, upwd } = req.body;
+
+    let pagenation = null;
+
+    const verify = (admin) => {
+        if(!admin){
+            throw new Error('존재하지 않는 아이디 입니다.');
+        }else{
+            if(admin.verify(upwd)){
+                //세션구현
+
+                return true;
+            }else{
+                throw new Error('비밀번호가 일치하지 않습니다.');
+            }
+        }
+    };
+
+    const getPagenation = (total) => {
+        pagenation = Board.getPagenation(1, total);
+
+        return Promise.resolve(false);
+    };
+
+    const getList = () => {
+        return Board.getList({}, pagenation);
+    };
+
+    const getBoard = () => {
+        Board.getTotal({})
+             .then(getPagenation)
+             .then(getList)
+             .then(respond)
+             .catch(onError);
+    };
+
+    const respond = (boards) => {
+        req.app.render('list', {
+            boards: boards,
+            pagenation: pagenation
+        },(err, html) => {
+            if(err) throw err;
+
+            res.end(html);
+        });
+    };
+
+    const onError = (error) => {
+        return res.status(403).json({
+            message: error.message
+        });
+    };
+
+    Admin.findOneById(uid)
+          .then(verify)
+          .then(getBoard)
+          .catch(onError);
+});
+
+app.post('/admin/account', function(req, res){
+    let {uid, pwd} = req.body;
+
+    const respond = () => {
+        res.json({
+            message: '회원가입이 성공적으로 이뤄졌습니다.'
+        });
+    };
+
+    const onError = (error) => {
+        res.status(403).json({
+            message: error.message
+        });
+    }
+
+    Admin.create(uid, pwd)
+         .then(respond)
+         .catch(onError);
 });
 
 app.listen(process.env.PORT || port, () => {
