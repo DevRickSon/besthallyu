@@ -17,6 +17,9 @@
                 <form method="post" action="/admin/login">
                     <fieldset>
                         <legend>login form</legend>
+                        <% if(typeof err !== 'undefined'){ %>
+                            <p class="err"><%= err %></p>
+                        <% } %>
                         <ul>
                             <li>
                                 <label for="uid">아이디</label>

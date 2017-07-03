@@ -2,6 +2,8 @@ import express from 'express';
 import path from 'path';
 import bodyParser from 'body-parser';
 import ejs from 'ejs';
+import session from 'express-session';
+import url from 'url';
 
 import mongoose from 'mongoose';
 import Board from './models/Board';
@@ -29,6 +31,12 @@ db.once('open', () => {
     console.log('Connected to mongodb server');
 });
 mongoose.connect(herokuConfig.db);
+
+app.use(session({
+    secret: herokuConfig.secret,
+    resave: false,
+    saveUninitialized: true
+}));
 
 app.use('/', express.static(path.join(__dirname, '../static')));
 
@@ -68,51 +76,16 @@ app.post('/registerVideo', (req, res) => {
          .catch(onError);
 });
 
+app.use('/admin/lists', (req, res, next) => {
+    if(typeof req.session.user !== 'undefined' && req.session.user.admin){
+        next();
+    }else{
+        res.redirect('/admin');
+    }
+});
+
 app.get('/admin/lists', (req, res) => {
-    const query = req.query;
-
-    let pagenation = null;
-
-    const getPagenation = (total) => {
-        pagenation = Board.getPagenation(1, total);
-
-        return Promise.resolve(false);
-    };
-
-    const getList = () => {
-        return Board.getList(query, pagenation);
-    };
-
-    const respond = (boards) => {
-        // res.json({
-        //     boards: boards,
-        //     pagenation: pagenation,
-        //     success: true
-        // });
-
-        req.app.render('list', {
-            boards: boards,
-            pagenation: pagenation
-        },(err, html) => {
-            if(err) throw err;
-
-            res.end(html);
-        });
-    };
-
-    const onError = (err) => {
-        res.status(409).json({
-            success: false,
-            error: err,
-            message: err.message
-        });
-    };
-
-    Board.getTotal(query)
-         .then(getPagenation)
-         .then(getList)
-         .then(respond)
-         .catch(onError);
+    res.redirect('/admin/lists/1');
 });
 
 app.get('/admin/lists/:page', (req, res) => {
@@ -144,12 +117,6 @@ app.get('/admin/lists/:page', (req, res) => {
     };
 
     const respond = (boards) => {
-        // res.json({
-        //     boards: boards,
-        //     pagenation: pagenation,
-        //     success: true
-        // });
-
         req.app.render('list', {
             boards: boards,
             pagenation: pagenation
@@ -178,14 +145,14 @@ app.get('/admin/lists/:page', (req, res) => {
 //에러 핸들러 등록
 //인피니티 라이브
 
-app.get('/admin', function(req, res){
+app.get('/admin', (req, res) => {
     req.app.render('login', (err, html) => {
         if(err) throw err;
         res.end(html);
     });
 });
 
-app.post('/admin/login', function(req, res){
+app.post('/admin/login', (req, res) => {
     const { uid, upwd } = req.body;
 
     let pagenation = null;
@@ -195,7 +162,10 @@ app.post('/admin/login', function(req, res){
             throw new Error('존재하지 않는 아이디 입니다.');
         }else{
             if(admin.verify(upwd)){
-                //세션구현
+                req.session.user = {
+                    admin: true,
+                    id: uid
+                };
 
                 return true;
             }else{
@@ -204,66 +174,53 @@ app.post('/admin/login', function(req, res){
         }
     };
 
-    const getPagenation = (total) => {
-        pagenation = Board.getPagenation(1, total);
-
-        return Promise.resolve(false);
-    };
-
-    const getList = () => {
-        return Board.getList({}, pagenation);
-    };
-
-    const getBoard = () => {
-        Board.getTotal({})
-             .then(getPagenation)
-             .then(getList)
-             .then(respond)
-             .catch(onError);
-    };
-
-    const respond = (boards) => {
-        req.app.render('list', {
-            boards: boards,
-            pagenation: pagenation
-        },(err, html) => {
-            if(err) throw err;
-
-            res.end(html);
-        });
+    const respond = () => {
+        res.redirect('/admin/lists');
     };
 
     const onError = (error) => {
-        return res.status(403).json({
-            message: error.message
+        req.app.render('login', {err: error.message}, (err, html) => {
+            if(err) throw err;
+            res.end(html);
         });
     };
 
     Admin.findOneById(uid)
           .then(verify)
-          .then(getBoard)
+          .then(respond)
           .catch(onError);
 });
 
-app.post('/admin/account', function(req, res){
-    let {uid, pwd} = req.body;
-
-    const respond = () => {
-        res.json({
-            message: '회원가입이 성공적으로 이뤄졌습니다.'
+app.get('/admin/logout', (req, res) => {
+    if(typeof req.session.user !== 'undefined'){
+        req.session.destroy((err) => {
+            if(err) throw err;
+            res.redirect('/admin');
         });
-    };
-
-    const onError = (error) => {
-        res.status(403).json({
-            message: error.message
-        });
+    }else{
+        res.redirect('/admin');
     }
-
-    Admin.create(uid, pwd)
-         .then(respond)
-         .catch(onError);
 });
+
+// app.post('/admin/account', (req, res) => {
+//     let {uid, pwd} = req.body;
+//
+//     const respond = () => {
+//         res.json({
+//             message: '회원가입이 성공적으로 이뤄졌습니다.'
+//         });
+//     };
+//
+//     const onError = (error) => {
+//         res.status(403).json({
+//             message: error.message
+//         });
+//     }
+//
+//     Admin.create(uid, pwd)
+//          .then(respond)
+//          .catch(onError);
+// });
 
 app.listen(process.env.PORT || port, () => {
     console.log(`Server is running on port ${port}.`);

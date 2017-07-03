@@ -2,7 +2,7 @@
 
 /*reset*/
 body,div,dl,dt,dd,ul,ol,li,h1,h2,h3,h4,h5,h6,pre,form,fieldset,legend,textarea,p,th,td,input,select,textarea,button{margin:0;padding:0}
-body,h1,h2,h3,h4,th,td,input,select,textarea,button{font-family:Dotum,'돋움',Helvetica,AppleSDGothicNeo,sans-serif;font-size:14px;line-height:1.5;color:#333}
+body,h1,h2,h3,h4,th,td,input,select,textarea,button{font-family:Dotum,'??',Helvetica,AppleSDGothicNeo,sans-serif;font-size:14px;line-height:1.5;color:#333}
 body{background-color:#fff;text-align:center;*word-break:break-all;-ms-word-break:break-all}
 img,fieldset,iframe{border:0 none}
 dl,ul,ol,menu,li {list-style:none}
@@ -71,3 +71,5 @@ h1{font-size:20px;}
 .pagenation span.on{background:#eee;border:1px solid #ccc;font-weight:bold}
 
 .frm_search{padding-top:20px;text-align:center}
+
+.err{color:#cc001e}
