@@ -16,6 +16,14 @@ var _ejs = require('ejs');
 
 var _ejs2 = _interopRequireDefault(_ejs);
 
+var _expressSession = require('express-session');
+
+var _expressSession2 = _interopRequireDefault(_expressSession);
+
+var _url = require('url');
+
+var _url2 = _interopRequireDefault(_url);
+
 var _mongoose = require('mongoose');
 
 var _mongoose2 = _interopRequireDefault(_mongoose);
@@ -23,6 +31,10 @@ var _mongoose2 = _interopRequireDefault(_mongoose);
 var _Board = require('./models/Board');
 
 var _Board2 = _interopRequireDefault(_Board);
+
+var _Admin = require('./models/Admin');
+
+var _Admin2 = _interopRequireDefault(_Admin);
 
 var _herokuConfig = require('../herokuConfig');
 
@@ -53,16 +65,15 @@ db.once('open', function () {
 });
 _mongoose2.default.connect(_herokuConfig2.default.db);
 
+app.use((0, _expressSession2.default)({
+    secret: _herokuConfig2.default.secret,
+    resave: false,
+    saveUninitialized: true
+}));
+
 app.use('/', _express2.default.static(_path2.default.join(__dirname, '../static')));
 
 app.get('/', function (req, res) {
-    req.app.render('index', function (err, html) {
-        if (err) throw err;
-        res.end(html);
-    });
-});
-
-app.get('/join', function (req, res) {
     req.app.render('join', function (err, html) {
         if (err) throw err;
         res.end(html);
@@ -85,20 +96,6 @@ app.post('/registerVideo', function (req, res) {
         upassport = _req$body.upassport,
         uvisa = _req$body.uvisa,
         ucancel = _req$body.ucancel;
-
-    console.log('url: ', vurl);
-    console.log('file: ', vfile);
-    console.log('vname: ', vname);
-    console.log('origin: ', vorigin);
-    console.log('name: ', ufirst, ' ', ulast);
-    console.log('unation: ', unation);
-    console.log('usns1: ', usns1);
-    console.log('usns2: ', usns2);
-    console.log('uemail: ', uemail);
-    console.log('uvisit: ', uvisit);
-    console.log('upassport: ', upassport);
-    console.log('uvisa: ', uvisa);
-    console.log('ucancel: ', ucancel);
     //유효성 체크
     //db insert
     //성공, 에러 페이지
@@ -124,53 +121,36 @@ app.post('/registerVideo', function (req, res) {
     _Board2.default.create(vurl, vfile, vname, vorigin, uname, unation, usns, uemail, uvisit, upassport, uvisa, ucancel).then(respond).catch(onError);
 });
 
-app.get('/lists', function (req, res) {
-    var query = req.query;
-
-    var pagenation = null;
-
-    var getPagenation = function getPagenation(total) {
-        pagenation = _Board2.default.getPagenation(1, total);
-
-        return Promise.resolve(false);
-    };
-
-    var getList = function getList() {
-        return _Board2.default.getList(query, pagenation);
-    };
-
-    var respond = function respond(boards) {
-        // res.json({
-        //     boards: boards,
-        //     pagenation: pagenation,
-        //     success: true
-        // });
-
-        req.app.render('list', {
-            boards: boards,
-            pagenation: pagenation,
-            success: true
-        }, function (err, html) {
-            if (err) throw err;
-
-            res.end(html);
-        });
-    };
-
-    var onError = function onError(err) {
-        res.status(409).json({
-            success: false,
-            error: err,
-            message: err.message
-        });
-    };
-
-    _Board2.default.getTotal(query).then(getPagenation).then(getList).then(respond).catch(onError);
+app.use('/admin/lists', function (req, res, next) {
+    if (typeof req.session.user !== 'undefined' && req.session.user.admin) {
+        next();
+    } else {
+        res.redirect('/admin');
+    }
 });
 
-app.get('/lists/:page', function (req, res) {
+app.get('/admin/lists', function (req, res) {
+    res.redirect('/admin/lists/1');
+});
+
+app.get('/admin/lists/:page', function (req, res) {
     var page = parseInt(req.params.page, 10);
-    var query = req.query;
+    var _req$query = req.query,
+        searchType = _req$query.searchType,
+        searchWord = _req$query.searchWord;
+
+
+    var query = {};
+    if (typeof searchType !== 'undefined' && searchType !== '') {
+        switch (searchType.toUpperCase()) {
+            case 'VNAME':
+            case 'VORIGIN':
+                query[searchType] = { $regex: searchWord };
+                break;
+            default:
+                query[searchType] = searchWord;
+        }
+    }
 
     var pagenation = null;
 
@@ -185,16 +165,9 @@ app.get('/lists/:page', function (req, res) {
     };
 
     var respond = function respond(boards) {
-        // res.json({
-        //     boards: boards,
-        //     pagenation: pagenation,
-        //     success: true
-        // });
-
         req.app.render('list', {
             boards: boards,
-            pagenation: pagenation,
-            success: true
+            pagenation: pagenation
         }, function (err, html) {
             if (err) throw err;
 
@@ -215,6 +188,83 @@ app.get('/lists/:page', function (req, res) {
 
 //에러 핸들러 등록
 //인피니티 라이브
+
+app.get('/admin', function (req, res) {
+    req.app.render('login', function (err, html) {
+        if (err) throw err;
+        res.end(html);
+    });
+});
+
+app.post('/admin/login', function (req, res) {
+    var _req$body2 = req.body,
+        uid = _req$body2.uid,
+        upwd = _req$body2.upwd;
+
+
+    var pagenation = null;
+
+    var verify = function verify(admin) {
+        if (!admin) {
+            throw new Error('존재하지 않는 아이디 입니다.');
+        } else {
+            if (admin.verify(upwd)) {
+                req.session.user = {
+                    admin: true,
+                    id: uid
+                };
+
+                return true;
+            } else {
+                throw new Error('비밀번호가 일치하지 않습니다.');
+            }
+        }
+    };
+
+    var respond = function respond() {
+        res.redirect('/admin/lists');
+    };
+
+    var onError = function onError(error) {
+        req.app.render('login', { err: error.message }, function (err, html) {
+            if (err) throw err;
+            res.end(html);
+        });
+    };
+
+    _Admin2.default.findOneById(uid).then(verify).then(respond).catch(onError);
+});
+
+app.get('/admin/logout', function (req, res) {
+    if (typeof req.session.user !== 'undefined') {
+        req.session.destroy(function (err) {
+            if (err) throw err;
+            res.redirect('/admin');
+        });
+    } else {
+        res.redirect('/admin');
+    }
+});
+
+// app.post('/admin/account', (req, res) => {
+//     let {uid, pwd} = req.body;
+//
+//     const respond = () => {
+//         res.json({
+//             message: '회원가입이 성공적으로 이뤄졌습니다.'
+//         });
+//     };
+//
+//     const onError = (error) => {
+//         res.status(403).json({
+//             message: error.message
+//         });
+//     }
+//
+//     Admin.create(uid, pwd)
+//          .then(respond)
+//          .catch(onError);
+// });
 
 app.listen(process.env.PORT || port, function () {
     console.log('Server is running on port ' + port + '.');
