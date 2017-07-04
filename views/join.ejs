@@ -12,7 +12,7 @@
             <h1>VIST SEOUL 참여하기</h1>
         </div>
         <div class="container">
-            <form method="post" action="/registerVideo">
+            <form method="post" action="/registerVideo" enctype="multipart/form-data">
                 <fieldset>
                 <legend></legend>
                     <ul class="frm">
@@ -33,6 +33,7 @@
                         <li>
                             <label for="uemail" class="txt">EMAIL</label>
                             <input type="text" name="uemail" id="uemail" />
+                            <a href="#">중복확인</a><!-- todo 유효성 체크 -->
                         </li>
                         <li>
                             <span class="label">한국 방문 경험</span>
@@ -81,10 +82,10 @@
                         <li>
                             <label for="vurl" class="txt">동영상 URL</label>
                             <input type="text" name="vurl" id="vurl" title=""/>
-                            <!-- todo
-                                <span class="or">or</span>
-                                <input type="file" name="vfile" title=""/>
-                            -->
+                            <!--todo 동영상 선택 UI-->
+                            <span class="or">or</span>
+                            <input type="file" name="vfile" title="동영상 선택"/>
+
                         </li>
                         <li>
                             <label for="vname" class="txt">출품명</label></label>
@@ -166,6 +167,8 @@
             vurl.focus();
             return false;
         }
+
+        //동영상 파일 유효성 체크
 
         if(vname.val() === ''){
             alert('출품명을 입력해 주세요');

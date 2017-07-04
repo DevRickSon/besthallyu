@@ -3,7 +3,9 @@ import path from 'path';
 import bodyParser from 'body-parser';
 import ejs from 'ejs';
 import session from 'express-session';
+import cookieParser from 'cookie-parser';
 import url from 'url';
+import multer from 'multer';
 
 import mongoose from 'mongoose';
 import Board from './models/Board';
@@ -32,13 +34,36 @@ db.once('open', () => {
 });
 mongoose.connect(herokuConfig.db);
 
+app.use(cookieParser());
 app.use(session({
+    key: herokuConfig.sid,
     secret: herokuConfig.secret,
     resave: false,
-    saveUninitialized: true
+    saveUninitialized: true,
+    cookie: {
+        maxAge: 1000 * 60 * 30
+    }
 }));
 
 app.use('/', express.static(path.join(__dirname, '../static')));
+app.use('/uploads', express.static(path.join(__dirname, '../uploads')));
+
+const maxFileSize = 3 * 1000 * 1000;
+const filePath = path.join(__dirname, '../uploads');
+const storage = multer.diskStorage({
+    destination: (req, file, cb) => {
+        cb(null, filePath);
+    },
+    filename: (req, file, cb) => {
+        let tmpArr = file.originalname.split('.');
+        let idx = tmpArr.length - 1;
+        let ext = tmpArr[idx];
+
+        cb(null, file.fieldname + '_' + Date.now() + '.' + ext);
+    }
+});
+
+const upload = multer({storage: storage, limits: {fileSize: maxFileSize}}).single('vfile');
 
 app.get('/', (req, res) => {
     req.app.render('join', (err, html) => {
@@ -48,32 +73,41 @@ app.get('/', (req, res) => {
 });
 
 app.post('/registerVideo', (req, res) => {
-    let { vurl, vfile, vname, vorigin, ufirst, ulast, unation, usns1, usns2, uemail, uvisit, upassport, uvisa, ucancel } = req.body;
-    //유효성 체크
-    //db insert
-    //성공, 에러 페이지
+    upload(req, res, (err) => {
+        if(err) throw err;
 
-    let uname = ufirst + ' ' + ulast;
-    let usns = usns1;
-    if(typeof usns2 !== 'undefined') usns += ', ' + usns2
+        let file = req.file;
+        let originalFileNm = file.originalname;;
+        let savedFileNm = file.filename;
+        let fileSize = file.size;
+        let vfile = savedFileNm;
 
-    const respond = () => {
-        res.json({
-            success: true
-        });
-    };
+        let { vurl, vname, vorigin, ufirst, ulast, unation, usns1, usns2, uemail, uvisit, upassport, uvisa, ucancel } = req.body;
+        let uname = ufirst + ' ' + ulast;
+        let usns = usns1;
+        if(typeof usns2 !== 'undefined') usns += ', ' + usns2
 
-    const onError = (err) => {
-        res.status(409).json({
-            success: false,
-            error: err,
-            message: err.message
-        });
-    }
+        //todo
+        //유효성 체크(확장자, 사이즈)
+        //성공, 에러 페이지
 
-    Board.create(vurl, vfile, vname, vorigin, uname, unation, usns, uemail, uvisit, upassport, uvisa, ucancel)
-         .then(respond)
-         .catch(onError);
+        const respond = () => {
+            res.json({
+                success: true,
+                ori: originalFileNm,
+                save: savedFileNm,
+                size: fileSize
+            });
+        };
+
+        const onError = (err) => {
+            res.redirect('/');
+        }
+
+        Board.create(vurl, vfile, vname, vorigin, uname, unation, usns, uemail, uvisit, upassport, uvisa, ucancel)
+             .then(respond)
+             .catch(onError);
+    });
 });
 
 app.use('/admin/lists', (req, res, next) => {
@@ -146,6 +180,7 @@ app.get('/admin/lists/:page', (req, res) => {
 //인피니티 라이브
 
 app.get('/admin', (req, res) => {
+    console.log(res);
     req.app.render('login', (err, html) => {
         if(err) throw err;
         res.end(html);
@@ -197,6 +232,7 @@ app.get('/admin/logout', (req, res) => {
             if(err) throw err;
             res.redirect('/admin');
         });
+        res.clearCookie(herokuConfig.sid);
     }else{
         res.redirect('/admin');
     }
