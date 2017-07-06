@@ -33,7 +33,7 @@
                     <li>
                         <label for="uemail" class="txt">EMAIL</label>
                         <input type="text" name="uemail" id="uemail" />
-                        <a href="#">중복확인</a><!-- todo 유효성 체크 -->
+                        <a href="#" class="btn_chk_email">중복확인</a><!-- todo 유효성 체크 -->
                     </li>
                     <li>
                         <span class="label">한국 방문 경험</span>
@@ -114,18 +114,43 @@
 <script src="/js/jquery-1.12.4.min.js"></script>
 <script>
 (function($){
-    $('.sbm').on('click',function(e){
-        var ufirst = $('#ufirst');
-        var ulast = $('input[name=ulast]');
-        var unation = $('#unation');
-        var usns1 = $('#usns1');
-        var usns2 = $('input[name=usns2]');
-        var uemail = $('#uemail');
-        var vurl = $('#vurl');
-        var vname = $('#vname');
-        var vorigin = $('#vorigin');
-        var agree = $('#agree');
+    var ufirst = $('#ufirst');
+    var ulast = $('input[name=ulast]');
+    var unation = $('#unation');
+    var usns1 = $('#usns1');
+    var usns2 = $('input[name=usns2]');
+    var uemail = $('#uemail');
+    var vurl = $('#vurl');
+    var vname = $('#vname');
+    var vorigin = $('#vorigin');
+    var agree = $('#agree');
 
+    var emailRegEx = /^[0-9a-zA-Z]([-_\.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_\.]?[0-9a-zA-Z])*\.[a-zA-Z]{2,3}$/i;
+    var emailFlag = false;
+    var tmpEmail = '';
+
+    $('.btn_chk_email').on('click', function(e){
+        $.ajax({
+            type: 'GET',
+            url: '/checkEmail',
+            data: {uemail: uemail.val()},
+            dataType: 'json',
+            success: function(data){
+                alert(data.message);
+                emailFlag = true;
+                tmpEmail = uemail.val();
+            },
+            error: function(err){
+                alert(err.responseJSON.message);
+                emailFlag = false;
+                uemail.focus();
+            }
+        });
+
+        return false;
+    });
+
+    $('.sbm').on('click', function(e){
         if(ufirst.val() === ''){
             alert('이름을 입력해 주세요');
             ufirst.focus();
@@ -155,11 +180,16 @@
             uemail.focus();
             return false;
         }else{
-            //todo 이메일 유효성 체크
-            //이메일 중복 검사
+            if(!emailRegEx.test(uemail.val())){
+                alert('이메일 형식이 바르지 않습니다.');
+                uemail.focus();
+                return false;
+            }
+        }
 
-            // ufirst.focus();
-            // return false;
+        if(!emailFlag || tmpEmail !== uemail.val()){
+            alert('이메일 중복확인을 해 주세요.');
+            return false;
         }
 
         if(vurl.val() === ''){
@@ -167,8 +197,6 @@
             vurl.focus();
             return false;
         }
-
-        //동영상 파일 유효성 체크
 
         if(vname.val() === ''){
             alert('출품명을 입력해 주세요');

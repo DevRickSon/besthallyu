@@ -72,6 +72,35 @@ app.get('/', (req, res) => {
     });
 });
 
+app.get('/checkEmail', (req, res) => {
+    const { uemail } = req.query;
+
+    const verify = (email) => {
+        if(!email){
+            return '참여 가능한 이메일 입니다.';
+        }else{
+            throw new Error('이미 참여한 이메일 입니다.');
+        }
+    };
+
+    const respond = (msg) => {
+        res.json({
+            message: msg
+        });
+    };
+
+    const onError = (error) => {
+        res.status(403).json({
+            message: error.message
+        });
+    };
+
+    Board.findOneByEmail(uemail)
+          .then(verify)
+          .then(respond)
+          .catch(onError);
+});
+
 app.post('/registerVideo', (req, res) => {
     upload(req, res, (err) => {
         if(err) throw err;
@@ -180,7 +209,6 @@ app.get('/admin/lists/:page', (req, res) => {
 //인피니티 라이브
 
 app.get('/admin', (req, res) => {
-    console.log(res);
     req.app.render('login', (err, html) => {
         if(err) throw err;
         res.end(html);

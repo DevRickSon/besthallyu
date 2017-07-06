@@ -42,6 +42,12 @@ Board.statics.create = function(vurl, vfile, vname, vorigin, uname, unation, usn
     return board.save();
 };
 
+Board.statics.findOneByEmail = function(uemail){
+    return this.findOne({
+        uemail
+    }).exec();
+};
+
 Board.statics.getTotal = function(query){
     return this.count(query).exec();
 };
