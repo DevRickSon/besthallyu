@@ -18,17 +18,10 @@
                 <fieldset>
                     <legend>login form</legend>
                     <ul class="frm_login">
-                        <% if(typeof uid !== 'undefined'){ %>
-                            <li><label for="uid">아이디</label><input type="text" name="uid" id="uid" value="<%= uid %>"/></li>
-                        <% }else{ %>
-                            <li><label for="uid">아이디</label><input type="text" name="uid" id="uid" /></li>
-                        <% } %>
+                        <li><label for="uid">아이디</label><input type="text" name="uid" id="uid" /></li>
                         <li><label for="upwd">비밀번호</label><input type="password" name="upwd" id="upwd" /></li>
                     </ul>
                     <p class="btn_login"><a href="#" class="btn_sbm">로그인</a></p>
-                    <% if(typeof err !== 'undefined'){ %>
-                        <p class="err"><%= err %></p>
-                    <% } %>
                 </fieldset>
             </form>
         </div>

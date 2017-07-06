@@ -153,6 +153,8 @@ app.post('/registerVideo', (req, res) => {
                     if(err) throw err;
                     res.end(html);
                 });
+            }else if(){
+                //todo 파일 확장자 제한
             }
 
             vurl = '';
@@ -161,6 +163,7 @@ app.post('/registerVideo', (req, res) => {
         }
 
         const respond = () => {
+            //todo 성공페이지
             res.json({
                 success: true,
                 ori: originalFileNm,
@@ -306,6 +309,8 @@ app.get('/admin/logout', (req, res) => {
         res.redirect('/admin');
     }
 });
+
+//todo error-handler
 
 // app.post('/admin/account', (req, res) => {
 //     let {uid, pwd} = req.body;
