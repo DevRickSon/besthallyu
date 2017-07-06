@@ -27,7 +27,7 @@
                     </li>
                     <li>
                         <label for="usns1" class="txt">SNS</label>
-                        <input type="text" name="usns1" id="usns1" />
+                            <input type="text" name="usns1" id="usns1" />
                         <input type="text" name="usns2" />
                     </li>
                     <li>
@@ -80,12 +80,15 @@
                         </span>
                     </li>
                     <li>
-                        <label for="vurl" class="txt">동영상 URL</label>
-                        <input type="text" name="vurl" id="vurl" title=""/>
-                        <!--todo 동영상 선택 UI-->
-                        <span class="or">or</span>
-                        <input type="file" name="vfile" title="동영상 선택"/>
-
+                        <label for="vurl" class="txt">동영상</label>
+                        <span class="wrp_lbl">
+                            <input type="radio" name="movType" id="movType1" value="url" />
+                            <label for="movType1" class="movType">URL</label>
+                            <input type="radio" name="movType" id="movType2" value="file" />
+                            <label for="movType2" class="movType">파일</label>
+                        </span>
+                        <input type="text" name="vurl" class="movTarget" id="vurl" title="동영상 URL입력" />
+                        <input type="file" name="vfile" class="movTarget" id="vfile" title="동영상 선택" />
                     </li>
                     <li>
                         <label for="vname" class="txt">출품명</label></label>
@@ -216,6 +219,34 @@
             return false;
         }
     });
+
+    var movType = $('.movType');
+    var current = null;
+
+    movType.each(function(a){
+        var self = $(this),
+            target = $('.movTarget');
+
+        self.data('target', target.eq(a));
+
+        if(a === 0) active(self);
+    });
+
+    movType.on('click', function(e){
+        if(current) deactive(current);
+        active($(this));
+    });
+
+    function active(item){
+        item.data('target').show();
+        item.addClass('on');
+        current = item;
+    }
+
+    function deactive(item){
+        item.data('target').hide();
+        item.removeClass('on');
+    }
 }(jQuery));
 </script>
 </body>

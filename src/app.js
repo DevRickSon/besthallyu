@@ -63,10 +63,15 @@ const storage = multer.diskStorage({
     }
 });
 
-const upload = multer({storage: storage, limits: {fileSize: maxFileSize}}).single('vfile');
+//const upload = multer({storage: storage, limits:{fileSize: maxFileSize}}).single('vfile');
+const upload = multer({storage: storage}).single('vfile');
 
 app.get('/', (req, res) => {
-    req.app.render('join', (err, html) => {
+    let context = {
+        status: 'init',
+        message: ''
+    };
+    req.app.render('join', context, (err, html) => {
         if(err) throw err;
         res.end(html);
     });
@@ -105,20 +110,55 @@ app.post('/registerVideo', (req, res) => {
     upload(req, res, (err) => {
         if(err) throw err;
 
-        let file = req.file;
-        let originalFileNm = file.originalname;;
-        let savedFileNm = file.filename;
-        let fileSize = file.size;
-        let vfile = savedFileNm;
-
-        let { vurl, vname, vorigin, ufirst, ulast, unation, usns1, usns2, uemail, uvisit, upassport, uvisa, ucancel } = req.body;
+        let { ufirst, ulast, unation, usns1, usns2, uemail, uvisit, upassport, uvisa, ucancel, movType, vurl, vname, vorigin } = req.body;
         let uname = ufirst + ' ' + ulast;
         let usns = usns1;
         if(typeof usns2 !== 'undefined') usns += ', ' + usns2
 
+        let file = null;
+        let originalFileNm = '';
+        let savedFileNm = '';
+        let fileSize = 0;
+        let maxFileSize = 3 * 1000 * 1000;
+        let vfile = ''
+
         //todo
         //유효성 체크(확장자, 사이즈)
         //성공, 에러 페이지
+
+        if(movType === 'file'){
+            file = req.file;
+            originalFileNm = file.originalname;;
+            savedFileNm = file.filename;
+            fileSize = file.size;
+            vfile = savedFileNm;
+
+            if(fileSize > maxFileSize){
+                let context = {
+                    ufirst: ufirst,
+                    ulast: ulast,
+                    unation: unation,
+                    usns1: usns1,
+                    usns2: usns2,
+                    uemail: uemail,
+                    uvisit: uvisit,
+                    vurl: vurl,
+                    vname: vname,
+                    vorigin: vorigin,
+                    status: 'error',
+                    message: '파일 사이즈는 3MB 이하로 등록 가능합니다'
+                };
+
+                return req.app.render('error', {message: '파일 사이즈는 3MB 이하로 등록 가능합니다'}, (err, html) => {
+                    if(err) throw err;
+                    res.end(html);
+                });
+            }
+
+            vurl = '';
+        }else{
+            vfile = '';
+        }
 
         const respond = () => {
             res.json({
@@ -130,10 +170,11 @@ app.post('/registerVideo', (req, res) => {
         };
 
         const onError = (err) => {
-            res.redirect('/');
+            console.error(err);
+            //res.redirect('/');
         }
 
-        Board.create(vurl, vfile, vname, vorigin, uname, unation, usns, uemail, uvisit, upassport, uvisa, ucancel)
+        Board.create(uname, unation, usns, uemail, uvisit, upassport, uvisa, ucancel, vurl, vfile, vname, vorigin)
              .then(respond)
              .catch(onError);
     });
@@ -222,7 +263,7 @@ app.post('/admin/login', (req, res) => {
 
     const verify = (admin) => {
         if(!admin){
-            throw new Error(0);
+            throw new Error('존재하지 않는 아이디 입니다.');
         }else{
             if(admin.verify(upwd)){
                 req.session.user = {
@@ -232,7 +273,7 @@ app.post('/admin/login', (req, res) => {
 
                 return true;
             }else{
-                throw new Error(1);
+                throw new Error('비밀번호가 일치하지 않습니다.');
             }
         }
     };
@@ -242,19 +283,7 @@ app.post('/admin/login', (req, res) => {
     };
 
     const onError = (error) => {
-        let msg = [
-            '존재하지 않는 아이디 입니다.',
-            '비밀번호가 일치하지 않습니다.'
-        ];
-        let errCode = Number(error.message);
-
-        let context = {
-            err: msg[errCode]
-        };
-
-        if(errCode === 1) context.uid = uid;
-
-        req.app.render('login', context, (err, html) => {
+        req.app.render('error', {message: error.message}, (err, html) => {
             if(err) throw err;
             res.end(html);
         });

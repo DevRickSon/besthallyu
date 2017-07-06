@@ -35,7 +35,12 @@ h1{font-size:20px;}
 .frm li label.radio{width:50px}
 .frm li label.radio.none{width:100px}
 .frm li input[type=text]{padding-left:10px;border:1px solid #dbdbdb}
-.frm li .or{display:inline-block;padding:0 10px}
+.frm .wrp_lbl{display:inline-block;border:1px solid #ccc;*zoom:1;vertical-align:middle}
+.frm .wrp_lbl:after{content:'';display:block;clear:both}
+.frm .wrp_lbl input{display:none}
+.frm .wrp_lbl .movType{float:left;width:50px;height:21px;background:#fff;line-height:21px;text-align:center;cursor:pointer}
+.frm .wrp_lbl .movType.on{background:#f9f9f9}
+.frm li .movTarget{display:none}
 
 .notice{display:inline-block;margin-top:20px;padding:20px;background:#f9f9f9}
 .notice .chk{margin-top:10px;text-align:right}
