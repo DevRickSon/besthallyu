@@ -194,7 +194,7 @@ app.post('/admin/login', (req, res) => {
 
     const verify = (admin) => {
         if(!admin){
-            throw new Error('존재하지 않는 아이디 입니다.');
+            throw new Error(0);
         }else{
             if(admin.verify(upwd)){
                 req.session.user = {
@@ -204,7 +204,7 @@ app.post('/admin/login', (req, res) => {
 
                 return true;
             }else{
-                throw new Error('비밀번호가 일치하지 않습니다.');
+                throw new Error(1);
             }
         }
     };
@@ -214,7 +214,19 @@ app.post('/admin/login', (req, res) => {
     };
 
     const onError = (error) => {
-        req.app.render('login', {err: error.message}, (err, html) => {
+        let msg = [
+            '존재하지 않는 아이디 입니다.',
+            '비밀번호가 일치하지 않습니다.'
+        ];
+        let errCode = Number(error.message);
+
+        let context = {
+            err: msg[errCode]
+        };
+
+        if(errCode === 1) context.uid = uid;
+
+        req.app.render('login', context, (err, html) => {
             if(err) throw err;
             res.end(html);
         });

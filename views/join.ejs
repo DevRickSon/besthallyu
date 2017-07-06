@@ -7,111 +7,111 @@
 <link rel="stylesheet" type="text/css" href="/css/common.css" />
 </head>
 <body>
-    <div class="wrap">
-        <div class="header">
-            <h1>VIST SEOUL 참여하기</h1>
-        </div>
-        <div class="container">
-            <form method="post" action="/registerVideo" enctype="multipart/form-data">
-                <fieldset>
-                <legend></legend>
-                    <ul class="frm">
-                        <li>
-                            <label for="ufirst" class="txt">이름</label>
-                            <input type="text" name="ufirst" id="ufirst" placeholder="first name" />
-                            <input type="text" name="ulast" placeholder="last name" />
-                        </li>
-                        <li>
-                            <label for="unation" class="txt">국적</label>
-                            <input type="text" name="unation" id="unation" />
-                        </li>
-                        <li>
-                            <label for="usns1" class="txt">SNS</label>
-                            <input type="text" name="usns1" id="usns1" />
-                            <input type="text" name="usns2" />
-                        </li>
-                        <li>
-                            <label for="uemail" class="txt">EMAIL</label>
-                            <input type="text" name="uemail" id="uemail" />
-                            <a href="#">중복확인</a><!-- todo 유효성 체크 -->
-                        </li>
-                        <li>
-                            <span class="label">한국 방문 경험</span>
-                            <span class="wrp_radio">
-                                <input type="radio" name="uvisit" id="uvisit1" value="1회" checked="checked" />
-                                <label for="uvisit1" class="radio">1회</label>
-                                <input type="radio" name="uvisit" id="uvisit2" value="2회" />
-                                <label for="uvisit2" class="radio">2회</label>
-                                <input type="radio" name="uvisit" id="uvisit3" value="3회" />
-                                <label for="uvisit3" class="radio">3회</label>
-                                <input type="radio" name="uvisit" id="uvisit4" value="4회 이상" />
-                                <label for="uvisit4" class="radio">4회 이상</label>
-                            </span>
-                        </li>
-                        <li>
-                            <span class="label">여권 보유 여부</span>
-                            <span class="wrp_radio">
-                                <input type="radio" name="upassport" id="upassport1" value="YES" checked="checked" />
-                                <label for="upassport1" class="radio">YES</label>
-                                <input type="radio" name="upassport" id="upassport2" value="NO" />
-                                <label for="upassport2" class="radio">NO</label>
-                            </span>
-                        </li>
-                        <li>
-                            <span class="label">한국 비자 보유 여부</span>
-                            <span class="wrp_radio">
-                                <input type="radio" name="uvisa" id="uvisa1" value="YES" checked="checked" />
-                                <label for="uvisa1" class="radio">YES</label>
-                                <input type="radio" name="uvisa" id="uvisa2" value="NO" />
-                                <label for="uvisa2" class="radio">NO</label>
-                                <input type="radio" name="uvisa" id="uvisa3" value="무비자 입국가능" />
-                                <label for="uvisa3" class="radio none">무비자 입국가능</label>
-                            </span>
-                        </li>
-                        <li>
-                            <span class="label">한국 출입국 결격사유 유무</span>
-                            <span class="wrp_radio">
-                                <input type="radio" name="ucancel" id="ucancel1" value="있음" checked="checked" />
-                                <label for="ucancel1" class="radio">있음</label>
-                                <input type="radio" name="ucancel" id="ucancel2" value="없음" />
-                                <label for="ucancel2" class="radio">없음</label>
-                                <input type="radio" name="ucancel" id="ucancel3" value="잘 모름" />
-                                <label for="ucancel3" class="radio">잘 모름</label>
-                            </span>
-                        </li>
-                        <li>
-                            <label for="vurl" class="txt">동영상 URL</label>
-                            <input type="text" name="vurl" id="vurl" title=""/>
-                            <!--todo 동영상 선택 UI-->
-                            <span class="or">or</span>
-                            <input type="file" name="vfile" title="동영상 선택"/>
-
-                        </li>
-                        <li>
-                            <label for="vname" class="txt">출품명</label></label>
-                            <input type="text" name="vname" id="vname" />
-                        </li>
-                        <li>
-                            <label for="vorigin" class="txt">한류 컨텐츠 원제목</label>
-                            <input type="text" name="vorigin" id="vorigin" />
-                        </li>
-                    </ul>
-                    <div class="notice">
-                        <p>
-                            입력하신 개인정보는 이벤트 참여를 위해서만 활용되며, 기타 목적으로 저장되거나 제3자에게 제공되지 않습니다.
-                            정보 제공에 동의하십니까?
-                        </p>
-                        <p class="chk">
-                            <input type="checkbox" name="agree" id="agree" />
-                            <label for="agree">YES</label>
-                        </p>
-                    </div>
-                    <p class="btn"><input type="submit" class="sbm" value="제출하기" /></p>
-                </fieldset>
-            </form>
-        </div>
+<div class="wrap">
+    <div class="header">
+        <h1>VIST SEOUL 참여하기</h1>
     </div>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+    <div class="container">
+        <form method="post" action="/registerVideo" enctype="multipart/form-data">
+            <fieldset>
+            <legend></legend>
+                <ul class="frm">
+                    <li>
+                        <label for="ufirst" class="txt">이름</label>
+                        <input type="text" name="ufirst" id="ufirst" placeholder="first name" />
+                        <input type="text" name="ulast" placeholder="last name" />
+                    </li>
+                    <li>
+                        <label for="unation" class="txt">국적</label>
+                        <input type="text" name="unation" id="unation" />
+                    </li>
+                    <li>
+                        <label for="usns1" class="txt">SNS</label>
+                        <input type="text" name="usns1" id="usns1" />
+                        <input type="text" name="usns2" />
+                    </li>
+                    <li>
+                        <label for="uemail" class="txt">EMAIL</label>
+                        <input type="text" name="uemail" id="uemail" />
+                        <a href="#">중복확인</a><!-- todo 유효성 체크 -->
+                    </li>
+                    <li>
+                        <span class="label">한국 방문 경험</span>
+                        <span class="wrp_radio">
+                            <input type="radio" name="uvisit" id="uvisit1" value="1회" checked="checked" />
+                            <label for="uvisit1" class="radio">1회</label>
+                            <input type="radio" name="uvisit" id="uvisit2" value="2회" />
+                            <label for="uvisit2" class="radio">2회</label>
+                            <input type="radio" name="uvisit" id="uvisit3" value="3회" />
+                            <label for="uvisit3" class="radio">3회</label>
+                            <input type="radio" name="uvisit" id="uvisit4" value="4회 이상" />
+                            <label for="uvisit4" class="radio">4회 이상</label>
+                        </span>
+                    </li>
+                    <li>
+                        <span class="label">여권 보유 여부</span>
+                        <span class="wrp_radio">
+                            <input type="radio" name="upassport" id="upassport1" value="YES" checked="checked" />
+                            <label for="upassport1" class="radio">YES</label>
+                            <input type="radio" name="upassport" id="upassport2" value="NO" />
+                            <label for="upassport2" class="radio">NO</label>
+                        </span>
+                    </li>
+                    <li>
+                        <span class="label">한국 비자 보유 여부</span>
+                        <span class="wrp_radio">
+                            <input type="radio" name="uvisa" id="uvisa1" value="YES" checked="checked" />
+                            <label for="uvisa1" class="radio">YES</label>
+                            <input type="radio" name="uvisa" id="uvisa2" value="NO" />
+                            <label for="uvisa2" class="radio">NO</label>
+                            <input type="radio" name="uvisa" id="uvisa3" value="무비자 입국가능" />
+                            <label for="uvisa3" class="radio none">무비자 입국가능</label>
+                        </span>
+                    </li>
+                    <li>
+                        <span class="label">한국 출입국 결격사유 유무</span>
+                        <span class="wrp_radio">
+                            <input type="radio" name="ucancel" id="ucancel1" value="있음" checked="checked" />
+                            <label for="ucancel1" class="radio">있음</label>
+                            <input type="radio" name="ucancel" id="ucancel2" value="없음" />
+                            <label for="ucancel2" class="radio">없음</label>
+                            <input type="radio" name="ucancel" id="ucancel3" value="잘 모름" />
+                            <label for="ucancel3" class="radio">잘 모름</label>
+                        </span>
+                    </li>
+                    <li>
+                        <label for="vurl" class="txt">동영상 URL</label>
+                        <input type="text" name="vurl" id="vurl" title=""/>
+                        <!--todo 동영상 선택 UI-->
+                        <span class="or">or</span>
+                        <input type="file" name="vfile" title="동영상 선택"/>
+
+                    </li>
+                    <li>
+                        <label for="vname" class="txt">출품명</label></label>
+                        <input type="text" name="vname" id="vname" />
+                    </li>
+                    <li>
+                        <label for="vorigin" class="txt">한류 컨텐츠 원제목</label>
+                        <input type="text" name="vorigin" id="vorigin" />
+                    </li>
+                </ul>
+                <div class="notice">
+                    <p>
+                        입력하신 개인정보는 이벤트 참여를 위해서만 활용되며, 기타 목적으로 저장되거나 제3자에게 제공되지 않습니다.
+                        정보 제공에 동의하십니까?
+                    </p>
+                    <p class="chk">
+                        <input type="checkbox" name="agree" id="agree" />
+                        <label for="agree">YES</label>
+                    </p>
+                </div>
+                <p class="btn"><input type="submit" class="sbm" value="제출하기" /></p>
+            </fieldset>
+        </form>
+    </div>
+</div>
+<script src="/js/jquery-1.12.4.min.js"></script>
 <script>
 (function($){
     $('.sbm').on('click',function(e){

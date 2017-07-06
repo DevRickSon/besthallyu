@@ -57,7 +57,16 @@ h1{font-size:20px;}
 .header.admin{width:94%;margin:0 auto}
 .wrp_cnt{font-size:14px}
 .wrp_cnt .cnt{font-weight:bold}
+
 .container.admin{width:94%;margin:0 auto}
+.wrp_login{position:relative;width:275px;margin:150px auto;padding:30px;border:1px solid #ebebeb}
+.frm_login li{margin-top:5px}
+.frm_login li label{display:inline-block;width:60px}
+.frm_login li input{width:150px}
+.wrp_login .btn_login{position:absolute;right:30px;top:35px}
+.wrp_login .btn_login a{display:block;width:53px;height:53px;line-height:53px;border:1px solid #ccc;background:#f9f9f9;text-align:center}
+.wrp_login p.err{margin-top:20px;text-align:center}
+
 .lists{width:100%;margin-top:40px;border-bottom:1px solid #ccc}
 .lists th{background:#f9f9f9}
 .lists th,.lists td{height:40px;border-right:1px solid #ddd}
