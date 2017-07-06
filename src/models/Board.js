@@ -5,10 +5,6 @@ import autoIncrement from 'mongoose-auto-increment';
 autoIncrement.initialize(mongoose.connection);
 
 const Board = new Schema({
-    vurl: String,
-    vfile: String,
-    vname: String,
-    vorigin: String,
     uname: String,
     unation: String,
     usns: String,
@@ -17,18 +13,18 @@ const Board = new Schema({
     upassport: String,
     uvisa: String,
     ucancel: String,
+    vurl: String,
+    vfile: String,
+    vname: String,
+    vorigin: String,
     date: {
         type: Date,
         default: Date.now
     }
 });
 
-Board.statics.create = function(vurl, vfile, vname, vorigin, uname, unation, usns, uemail, uvisit, upassport, uvisa, ucancel){
+Board.statics.create = function(uname, unation, usns, uemail, uvisit, upassport, uvisa, ucancel, vurl, vfile, vname, vorigin){
     const board = new this({
-        vurl,
-        vfile,
-        vname,
-        vorigin,
         uname,
         unation,
         usns,
@@ -36,7 +32,11 @@ Board.statics.create = function(vurl, vfile, vname, vorigin, uname, unation, usn
         uvisit,
         upassport,
         uvisa,
-        ucancel
+        ucancel,
+        vurl,
+        vfile,
+        vname,
+        vorigin
     });
 
     return board.save();

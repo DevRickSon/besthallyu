@@ -11,6 +11,8 @@ import mongoose from 'mongoose';
 import Board from './models/Board';
 import Admin from './models/Admin';
 
+import expressErrorHandler from 'express-error-handler';
+
 //import morgan from 'morgan';
 
 //import localConfig from '../localConfig';
@@ -120,18 +122,19 @@ app.post('/registerVideo', (req, res) => {
         let savedFileNm = '';
         let fileSize = 0;
         let maxFileSize = 3 * 1000 * 1000;
-        let vfile = ''
+        let vfile = '';
+        let mType = '';
 
         //todo
-        //유효성 체크(확장자, 사이즈)
-        //성공, 에러 페이지
-
+        //에러 페이지
+        console.log(movType);
         if(movType === 'file'){
             file = req.file;
             originalFileNm = file.originalname;;
             savedFileNm = file.filename;
             fileSize = file.size;
             vfile = savedFileNm;
+            mType = file.mimetype;
 
             if(fileSize > maxFileSize){
                 let context = {
@@ -153,8 +156,11 @@ app.post('/registerVideo', (req, res) => {
                     if(err) throw err;
                     res.end(html);
                 });
-            }else if(){
-                //todo 파일 확장자 제한
+            }else if(mType.indexOf('video') === -1){
+                return req.app.render('error', {message: '동영상 파일만 등록 가능합니다.'}, (err, html) => {
+                    if(err) throw err;
+                    res.end(html);
+                });
             }
 
             vurl = '';
@@ -163,13 +169,7 @@ app.post('/registerVideo', (req, res) => {
         }
 
         const respond = () => {
-            //todo 성공페이지
-            res.json({
-                success: true,
-                ori: originalFileNm,
-                save: savedFileNm,
-                size: fileSize
-            });
+            res.redirect('/join/success');
         };
 
         const onError = (err) => {
@@ -180,6 +180,13 @@ app.post('/registerVideo', (req, res) => {
         Board.create(uname, unation, usns, uemail, uvisit, upassport, uvisa, ucancel, vurl, vfile, vname, vorigin)
              .then(respond)
              .catch(onError);
+    });
+});
+
+app.get('/join/success', (req, res) => {
+    return req.app.render('success', (err, html) => {
+        if(err) throw err;
+        res.end(html);
     });
 });
 
@@ -249,9 +256,6 @@ app.get('/admin/lists/:page', (req, res) => {
          .catch(onError);
 });
 
-//에러 핸들러 등록
-//인피니티 라이브
-
 app.get('/admin', (req, res) => {
     req.app.render('login', (err, html) => {
         if(err) throw err;
@@ -311,6 +315,7 @@ app.get('/admin/logout', (req, res) => {
 });
 
 //todo error-handler
+//인피니티 라이브
 
 // app.post('/admin/account', (req, res) => {
 //     let {uid, pwd} = req.body;
@@ -331,6 +336,15 @@ app.get('/admin/logout', (req, res) => {
 //          .then(respond)
 //          .catch(onError);
 // });
+
+const errorHandler = expressErrorHandler({
+    static: {
+        '404': path.join(__dirname, '../views/404.html')
+    }
+});
+
+app.use(expressErrorHandler.httpError(404));
+app.use(errorHandler);
 
 app.listen(process.env.PORT || port, () => {
     console.log(`Server is running on port ${port}.`);

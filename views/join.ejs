@@ -36,7 +36,7 @@
                         <a href="#" class="btn_chk_email">중복확인</a><!-- todo 유효성 체크 -->
                     </li>
                     <li>
-                        <span class="label">한국 방문 경험</span>
+                        <span class="label txt">한국 방문 경험</span>
                         <span class="wrp_radio">
                             <input type="radio" name="uvisit" id="uvisit1" value="1회" checked="checked" />
                             <label for="uvisit1" class="radio">1회</label>
@@ -44,12 +44,14 @@
                             <label for="uvisit2" class="radio">2회</label>
                             <input type="radio" name="uvisit" id="uvisit3" value="3회" />
                             <label for="uvisit3" class="radio">3회</label>
-                            <input type="radio" name="uvisit" id="uvisit4" value="4회 이상" />
-                            <label for="uvisit4" class="radio">4회 이상</label>
+                            <span class="inbl">
+                                <input type="radio" name="uvisit" id="uvisit4" value="4회 이상" />
+                                <label for="uvisit4" class="radio">4회 이상</label>
+                            </span>
                         </span>
                     </li>
                     <li>
-                        <span class="label">여권 보유 여부</span>
+                        <span class="label txt">여권 보유 여부</span>
                         <span class="wrp_radio">
                             <input type="radio" name="upassport" id="upassport1" value="YES" checked="checked" />
                             <label for="upassport1" class="radio">YES</label>
@@ -58,18 +60,20 @@
                         </span>
                     </li>
                     <li>
-                        <span class="label">한국 비자 보유 여부</span>
+                        <span class="label txt">한국 비자 보유 여부</span>
                         <span class="wrp_radio">
                             <input type="radio" name="uvisa" id="uvisa1" value="YES" checked="checked" />
                             <label for="uvisa1" class="radio">YES</label>
                             <input type="radio" name="uvisa" id="uvisa2" value="NO" />
                             <label for="uvisa2" class="radio">NO</label>
-                            <input type="radio" name="uvisa" id="uvisa3" value="무비자 입국가능" />
-                            <label for="uvisa3" class="radio none">무비자 입국가능</label>
+                            <span class="inbl">
+                                <input type="radio" name="uvisa" id="uvisa3" value="무비자 입국가능" />
+                                <label for="uvisa3" class="radio none">무비자 입국가능</label>
+                            </span>
                         </span>
                     </li>
                     <li>
-                        <span class="label">한국 출입국 결격사유 유무</span>
+                        <span class="label txt">한국 출입국 결격사유 유무</span>
                         <span class="wrp_radio">
                             <input type="radio" name="ucancel" id="ucancel1" value="있음" checked="checked" />
                             <label for="ucancel1" class="radio">있음</label>
@@ -123,7 +127,9 @@
     var usns1 = $('#usns1');
     var usns2 = $('input[name=usns2]');
     var uemail = $('#uemail');
+    var movType = $('input[name=movType]');
     var vurl = $('#vurl');
+    var vfile = $('#vfile');
     var vname = $('#vname');
     var vorigin = $('#vorigin');
     var agree = $('#agree');
@@ -133,6 +139,18 @@
     var tmpEmail = '';
 
     $('.btn_chk_email').on('click', function(e){
+        if(uemail.val() === ''){
+            alert('이메일을 입력해 주세요');
+            uemail.focus();
+            return false;
+        }else{
+            if(!emailRegEx.test(uemail.val())){
+                alert('이메일 형식이 바르지 않습니다.');
+                uemail.focus();
+                return false;
+            }
+        }
+
         $.ajax({
             type: 'GET',
             url: '/checkEmail',
@@ -195,10 +213,18 @@
             return false;
         }
 
-        if(vurl.val() === ''){
-            alert('동영상 URL을 입력해 주세요');
-            vurl.focus();
-            return false;
+        if(current.attr('for') === 'movType1'){
+            if(vurl.val() === ''){
+                alert('동영상 URL을 입력해 주세요');
+                vurl.focus();
+                return false;
+            }
+        }else{
+            if(vurl.val() === ''){
+                alert('동영상 파일을 선택해 주세요');
+                vfile.focus();
+                return false;
+            }
         }
 
         if(vname.val() === ''){
@@ -214,7 +240,7 @@
         }
 
         if(!agree.prop('checked')){
-            alert('!!!!');
+            alert('개인정보 취급 방식에 동의해주세요');
             agree.focus();
             return false;
         }

@@ -72,7 +72,11 @@
                 <tr>
                     <td class="alc"><%= board.num %></td>
                     <td><%= board.vurl %></td>
-                    <td><a href="/uploads/<%= board.vfile %>">다운로드</a></td>
+                    <td>
+                        <% if(board.vfile !== ''){ %>
+                            <a href="/uploads/<%= board.vfile %>">다운로드</a>
+                        <% } %>
+                    </td>
                     <td><%= board.vname %></td>
                     <td><%= board.vorigin %></td>
                     <td><%= board.uname %></td>
@@ -90,7 +94,7 @@
         </table>
         <p class="pagenation">
             <% if(pagenation.prevPage > -1){ %>
-                <a href="/lists/<%= pagenation.prevPage %>">&lt;</a>
+                <a href="/admin/lists/<%= pagenation.prevPage %>">&lt;</a>
             <% } %>
 
             <%
@@ -101,14 +105,14 @@
             <%
                     }else{
             %>
-                <a href="/lists/<%= i %>"><%= i %></a>
+                <a href="/admin/lists/<%= i %>"><%= i %></a>
             <%
                     }
                 }
             %>
 
             <% if(pagenation.nextPage > -1){ %>
-                <a href="/lists/<%= pagenation.nextPage %>">&gt;</a>
+                <a href="/admin/lists/<%= pagenation.nextPage %>">&gt;</a>
             <% } %>
         </p>
         <div class="frm_search">
