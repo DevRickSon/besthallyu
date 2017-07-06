@@ -19,10 +19,6 @@ var Schema = _mongoose2.default.Schema;
 _mongooseAutoIncrement2.default.initialize(_mongoose2.default.connection);
 
 var Board = new Schema({
-    vurl: String,
-    vfile: String,
-    vname: String,
-    vorigin: String,
     uname: String,
     unation: String,
     usns: String,
@@ -31,18 +27,18 @@ var Board = new Schema({
     upassport: String,
     uvisa: String,
     ucancel: String,
+    vurl: String,
+    vfile: String,
+    vname: String,
+    vorigin: String,
     date: {
         type: Date,
         default: Date.now
     }
 });
 
-Board.statics.create = function (vurl, vfile, vname, vorigin, uname, unation, usns, uemail, uvisit, upassport, uvisa, ucancel) {
+Board.statics.create = function (uname, unation, usns, uemail, uvisit, upassport, uvisa, ucancel, vurl, vfile, vname, vorigin) {
     var board = new this({
-        vurl: vurl,
-        vfile: vfile,
-        vname: vname,
-        vorigin: vorigin,
         uname: uname,
         unation: unation,
         usns: usns,
@@ -50,10 +46,20 @@ Board.statics.create = function (vurl, vfile, vname, vorigin, uname, unation, us
         uvisit: uvisit,
         upassport: upassport,
         uvisa: uvisa,
-        ucancel: ucancel
+        ucancel: ucancel,
+        vurl: vurl,
+        vfile: vfile,
+        vname: vname,
+        vorigin: vorigin
     });
 
     return board.save();
+};
+
+Board.statics.findOneByEmail = function (uemail) {
+    return this.findOne({
+        uemail: uemail
+    }).exec();
 };
 
 Board.statics.getTotal = function (query) {

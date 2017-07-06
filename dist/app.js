@@ -20,9 +20,17 @@ var _expressSession = require('express-session');
 
 var _expressSession2 = _interopRequireDefault(_expressSession);
 
+var _cookieParser = require('cookie-parser');
+
+var _cookieParser2 = _interopRequireDefault(_cookieParser);
+
 var _url = require('url');
 
 var _url2 = _interopRequireDefault(_url);
+
+var _multer = require('multer');
+
+var _multer2 = _interopRequireDefault(_multer);
 
 var _mongoose = require('mongoose');
 
@@ -35,6 +43,10 @@ var _Board2 = _interopRequireDefault(_Board);
 var _Admin = require('./models/Admin');
 
 var _Admin2 = _interopRequireDefault(_Admin);
+
+var _expressErrorHandler = require('express-error-handler');
+
+var _expressErrorHandler2 = _interopRequireDefault(_expressErrorHandler);
 
 var _herokuConfig = require('../herokuConfig');
 
@@ -65,60 +77,169 @@ db.once('open', function () {
 });
 _mongoose2.default.connect(_herokuConfig2.default.db);
 
+app.use((0, _cookieParser2.default)());
 app.use((0, _expressSession2.default)({
+    key: _herokuConfig2.default.sid,
     secret: _herokuConfig2.default.secret,
     resave: false,
-    saveUninitialized: true
+    saveUninitialized: true,
+    cookie: {
+        maxAge: 1000 * 60 * 30
+    }
 }));
 
 app.use('/', _express2.default.static(_path2.default.join(__dirname, '../static')));
+app.use('/uploads', _express2.default.static(_path2.default.join(__dirname, '../uploads')));
+
+var maxFileSize = 3 * 1000 * 1000;
+var filePath = _path2.default.join(__dirname, '../uploads');
+var storage = _multer2.default.diskStorage({
+    destination: function destination(req, file, cb) {
+        cb(null, filePath);
+    },
+    filename: function filename(req, file, cb) {
+        var tmpArr = file.originalname.split('.');
+        var idx = tmpArr.length - 1;
+        var ext = tmpArr[idx];
+
+        cb(null, file.fieldname + '_' + Date.now() + '.' + ext);
+    }
+});
+
+//const upload = multer({storage: storage, limits:{fileSize: maxFileSize}}).single('vfile');
+var upload = (0, _multer2.default)({ storage: storage }).single('vfile');
 
 app.get('/', function (req, res) {
-    req.app.render('join', function (err, html) {
+    var context = {
+        status: 'init',
+        message: ''
+    };
+    req.app.render('join', context, function (err, html) {
         if (err) throw err;
         res.end(html);
     });
 });
 
-app.post('/registerVideo', function (req, res) {
-    var _req$body = req.body,
-        vurl = _req$body.vurl,
-        vfile = _req$body.vfile,
-        vname = _req$body.vname,
-        vorigin = _req$body.vorigin,
-        ufirst = _req$body.ufirst,
-        ulast = _req$body.ulast,
-        unation = _req$body.unation,
-        usns1 = _req$body.usns1,
-        usns2 = _req$body.usns2,
-        uemail = _req$body.uemail,
-        uvisit = _req$body.uvisit,
-        upassport = _req$body.upassport,
-        uvisa = _req$body.uvisa,
-        ucancel = _req$body.ucancel;
-    //유효성 체크
-    //db insert
-    //성공, 에러 페이지
+app.get('/checkEmail', function (req, res) {
+    var uemail = req.query.uemail;
 
-    var uname = ufirst + ' ' + ulast;
-    var usns = usns1;
-    if (typeof usns2 !== 'undefined') usns += ', ' + usns2;
 
-    var respond = function respond() {
+    var verify = function verify(email) {
+        if (!email) {
+            return '참여 가능한 이메일 입니다.';
+        } else {
+            throw new Error('이미 참여한 이메일 입니다.');
+        }
+    };
+
+    var respond = function respond(msg) {
         res.json({
-            success: true
+            message: msg
         });
     };
 
-    var onError = function onError(err) {
-        res.status(409).json({
-            success: false,
-            error: err,
-            message: err.message
+    var onError = function onError(error) {
+        res.status(403).json({
+            message: error.message
         });
     };
 
-    _Board2.default.create(vurl, vfile, vname, vorigin, uname, unation, usns, uemail, uvisit, upassport, uvisa, ucancel).then(respond).catch(onError);
+    _Board2.default.findOneByEmail(uemail).then(verify).then(respond).catch(onError);
+});
+
+app.post('/registerVideo', function (req, res) {
+    upload(req, res, function (err) {
+        if (err) throw err;
+
+        var _req$body = req.body,
+            ufirst = _req$body.ufirst,
+            ulast = _req$body.ulast,
+            unation = _req$body.unation,
+            usns1 = _req$body.usns1,
+            usns2 = _req$body.usns2,
+            uemail = _req$body.uemail,
+            uvisit = _req$body.uvisit,
+            upassport = _req$body.upassport,
+            uvisa = _req$body.uvisa,
+            ucancel = _req$body.ucancel,
+            movType = _req$body.movType,
+            vurl = _req$body.vurl,
+            vname = _req$body.vname,
+            vorigin = _req$body.vorigin;
+
+        var uname = ufirst + ' ' + ulast;
+        var usns = usns1;
+        if (typeof usns2 !== 'undefined') usns += ', ' + usns2;
+
+        var file = null;
+        var originalFileNm = '';
+        var savedFileNm = '';
+        var fileSize = 0;
+        var maxFileSize = 3 * 1000 * 1000;
+        var vfile = '';
+        var mType = '';
+
+        //todo
+        //에러 페이지
+        console.log(movType);
+        if (movType === 'file') {
+            file = req.file;
+            originalFileNm = file.originalname;;
+            savedFileNm = file.filename;
+            fileSize = file.size;
+            vfile = savedFileNm;
+            mType = file.mimetype;
+
+            if (fileSize > maxFileSize) {
+                var context = {
+                    ufirst: ufirst,
+                    ulast: ulast,
+                    unation: unation,
+                    usns1: usns1,
+                    usns2: usns2,
+                    uemail: uemail,
+                    uvisit: uvisit,
+                    vurl: vurl,
+                    vname: vname,
+                    vorigin: vorigin,
+                    status: 'error',
+                    message: '파일 사이즈는 3MB 이하로 등록 가능합니다'
+                };
+
+                return req.app.render('error', { message: '파일 사이즈는 3MB 이하로 등록 가능합니다' }, function (err, html) {
+                    if (err) throw err;
+                    res.end(html);
+                });
+            } else if (mType.indexOf('video') === -1) {
+                return req.app.render('error', { message: '동영상 파일만 등록 가능합니다.' }, function (err, html) {
+                    if (err) throw err;
+                    res.end(html);
+                });
+            }
+
+            vurl = '';
+        } else {
+            vfile = '';
+        }
+
+        var respond = function respond() {
+            res.redirect('/join/success');
+        };
+
+        var onError = function onError(err) {
+            console.error(err);
+            //res.redirect('/');
+        };
+
+        _Board2.default.create(uname, unation, usns, uemail, uvisit, upassport, uvisa, ucancel, vurl, vfile, vname, vorigin).then(respond).catch(onError);
+    });
+});
+
+app.get('/join/success', function (req, res) {
+    return req.app.render('success', function (err, html) {
+        if (err) throw err;
+        res.end(html);
+    });
 });
 
 app.use('/admin/lists', function (req, res, next) {
@@ -186,9 +307,6 @@ app.get('/admin/lists/:page', function (req, res) {
     _Board2.default.getTotal(query).then(getPagenation).then(getList).then(respond).catch(onError);
 });
 
-//에러 핸들러 등록
-//인피니티 라이브
-
 app.get('/admin', function (req, res) {
     req.app.render('login', function (err, html) {
         if (err) throw err;
@@ -226,7 +344,7 @@ app.post('/admin/login', function (req, res) {
     };
 
     var onError = function onError(error) {
-        req.app.render('login', { err: error.message }, function (err, html) {
+        req.app.render('error', { message: error.message }, function (err, html) {
             if (err) throw err;
             res.end(html);
         });
@@ -241,10 +359,14 @@ app.get('/admin/logout', function (req, res) {
             if (err) throw err;
             res.redirect('/admin');
         });
+        res.clearCookie(_herokuConfig2.default.sid);
     } else {
         res.redirect('/admin');
     }
 });
+
+//todo error-handler
+//인피니티 라이브
 
 // app.post('/admin/account', (req, res) => {
 //     let {uid, pwd} = req.body;
@@ -265,6 +387,15 @@ app.get('/admin/logout', function (req, res) {
 //          .then(respond)
 //          .catch(onError);
 // });
+
+var errorHandler = (0, _expressErrorHandler2.default)({
+    static: {
+        '404': _path2.default.join(__dirname, '../views/404.html')
+    }
+});
+
+app.use(_expressErrorHandler2.default.httpError(404));
+app.use(errorHandler);
 
 app.listen(process.env.PORT || port, function () {
     console.log('Server is running on port ' + port + '.');
