@@ -16,32 +16,19 @@ import multerS3 from 'multer-s3';
 
 import expressErrorHandler from 'express-error-handler';
 
-//import morgan from 'morgan';
-
 //import localConfig from '../localConfig';
 import herokuConfig from '../herokuConfig'
 
 const app = express();
 const port = 8083;
 const S3_BUCKET = 'visitseoul';
-// const accessKeyId = process.env.AWS_ACCESS_KEY_ID;
-// const secretAccessKey = process.env.AWS_SECRET_ACCESS_KEY;
-// const S3_BUCKET = process.env.S3_BUCKET;
-
-// aws.config.update({
-//     accessKeyId: accessKeyId,
-//     secretAccessKey: secretAccessKey,
-//     region: 'ap-northeast-2'
-// });
 
 aws.config.update({
-    accessKeyId: 'AKIAJ72VSZFZURYONESA',
-    secretAccessKey: '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',
-    region: 'ap-northeast-2'
+    accessKeyId: herokuConfig.accessKeyId,
+    secretAccessKey: herokuConfig.secretAccessKey,
+    region: herokuConfig.region
 });
 const s3 = new aws.S3();
-
-//app.use(morgan('dev'));
 
 app.use(bodyParser.urlencoded({extended:true}));
 app.use(bodyParser.json());
@@ -68,37 +55,7 @@ app.use(session({
 }));
 
 app.use('/', express.static(path.join(__dirname, '../static')));
-//app.use('/uploads', express.static(path.join(__dirname, '../uploads')));
 
-//const maxFileSize = 3 * 1000 * 1000;
-// const filePath = path.join(__dirname, '../uploads');
-// const storage = multer.diskStorage({
-//     destination: (req, file, cb) => {
-//         cb(null, filePath);
-//     },
-//     filename: (req, file, cb) => {
-//         let tmpArr = file.originalname.split('.');
-//         let idx = tmpArr.length - 1;
-//         let ext = tmpArr[idx];
-//
-//         cb(null, file.fieldname + '_' + Date.now() + '.' + ext);
-//     }
-// });
-
-// const storage = {
-//     storage: multerS3({
-//         s3: s3,
-//         buket: 'visitseoul',
-//         metadata: (req, file, cb) => {
-//             cb(null, {fieldname: file.fielname});
-//         },
-//         key: (req, file, cb) => {
-//             cb(null, Data.now().toString());
-//         }
-//     })
-// };
-
-//const upload = multer({storage: storage, limits:{fileSize: maxFileSize}}).single('vfile');
 const upload = multer({
     storage: multerS3({
         s3: s3,
@@ -162,41 +119,18 @@ app.post('/registerVideo', (req, res) => {
         if(typeof usns2 !== 'undefined') usns += ', ' + usns2
 
         let file = null;
-        let originalFileNm = '';
-        let savedFileNm = '';
         let fileSize = 0;
         let maxFileSize = 3 * 1000 * 1000;
         let vfile = '';
         let mType = '';
 
-
-
-        //todo
-        //에러 페이지
         if(movType === 'file'){
             file = req.file;
-            originalFileNm = file.originalname;;
-            savedFileNm = file.filename;
             fileSize = file.size;
             vfile = file.location;
             mType = file.mimetype;
 
             if(fileSize > maxFileSize){
-                let context = {
-                    ufirst: ufirst,
-                    ulast: ulast,
-                    unation: unation,
-                    usns1: usns1,
-                    usns2: usns2,
-                    uemail: uemail,
-                    uvisit: uvisit,
-                    vurl: vurl,
-                    vname: vname,
-                    vorigin: vorigin,
-                    status: 'error',
-                    message: '파일 사이즈는 3MB 이하로 등록 가능합니다'
-                };
-
                 return req.app.render('error', {message: '파일 사이즈는 3MB 이하로 등록 가능합니다'}, (err, html) => {
                     if(err) throw err;
                     res.end(html);
@@ -219,7 +153,6 @@ app.post('/registerVideo', (req, res) => {
 
         const onError = (err) => {
             console.error(err);
-            //res.redirect('/');
         }
 
         Board.create(uname, unation, usns, uemail, uvisit, upassport, uvisa, ucancel, vurl, vfile, vname, vorigin)
