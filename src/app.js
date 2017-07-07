@@ -23,22 +23,22 @@ import herokuConfig from '../herokuConfig'
 
 const app = express();
 const port = 8083;
-//const S3_BUCKET = 'visitseoul';
-const accessKeyId = process.env.AWS_ACCESS_KEY_ID;
-const secretAccessKey = process.env.AWS_SECRET_ACCESS_KEY;
-const S3_BUCKET = process.env.S3_BUCKET;
-
-aws.config.update({
-    accessKeyId: accessKeyId,
-    secretAccessKey: secretAccessKey,
-    region: 'ap-northeast-2'
-});
+const S3_BUCKET = 'visitseoul';
+// const accessKeyId = process.env.AWS_ACCESS_KEY_ID;
+// const secretAccessKey = process.env.AWS_SECRET_ACCESS_KEY;
+// const S3_BUCKET = process.env.S3_BUCKET;
 
 // aws.config.update({
-//     accessKeyId: 'AKIAJ72VSZFZURYONESA',
-//     secretAccessKey: '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',
+//     accessKeyId: accessKeyId,
+//     secretAccessKey: secretAccessKey,
 //     region: 'ap-northeast-2'
 // });
+
+aws.config.update({
+    accessKeyId: 'AKIAJ72VSZFZURYONESA',
+    secretAccessKey: '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',
+    region: 'ap-northeast-2'
+});
 const s3 = new aws.S3();
 
 //app.use(morgan('dev'));
