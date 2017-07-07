@@ -69,9 +69,22 @@ var app = (0, _express2.default)();
 //import localConfig from '../localConfig';
 
 var port = 8083;
-//const S3_BUKET = 'visitseoul';
-var S3_BUKET = process.env.S3_BUKET;
+//const S3_BUCKET = 'visitseoul';
+var accessKeyId = process.env.AWS_ACCESS_KEY_ID;
+var secretAccessKey = process.env.AWS_SECRET_ACCESS_KEY;
+var S3_BUCKET = process.env.S3_BUCKET;
 
+_awsSdk2.default.config.update({
+    accessKeyId: accessKeyId,
+    secretAccessKey: secretAccessKey,
+    region: 'ap-northeast-2'
+});
+
+// aws.config.update({
+//     accessKeyId: 'AKIAJ72VSZFZURYONESA',
+//     secretAccessKey: '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',
+//     region: 'ap-northeast-2'
+// });
 var s3 = new _awsSdk2.default.S3();
 
 //app.use(morgan('dev'));
@@ -118,21 +131,32 @@ app.use('/', _express2.default.static(_path2.default.join(__dirname, '../static'
 //     }
 // });
 
-var storage = {
-    storage: (0, _multerS2.default)({
-        s3: s3,
-        buket: S3_BUKET,
-        metadata: function metadata(req, file, cb) {
-            cb(null, { fieldname: file.fielname });
-        },
-        key: function key(req, file, cb) {
-            cb(null, Data.now().toString());
-        }
-    })
-};
+// const storage = {
+//     storage: multerS3({
+//         s3: s3,
+//         buket: 'visitseoul',
+//         metadata: (req, file, cb) => {
+//             cb(null, {fieldname: file.fielname});
+//         },
+//         key: (req, file, cb) => {
+//             cb(null, Data.now().toString());
+//         }
+//     })
+// };
 
 //const upload = multer({storage: storage, limits:{fileSize: maxFileSize}}).single('vfile');
-var upload = (0, _multer2.default)(storage).single('vfile');
+var upload = (0, _multer2.default)({
+    storage: (0, _multerS2.default)({
+        s3: s3,
+        bucket: S3_BUCKET,
+        metadata: function metadata(req, file, cb) {
+            cb(null, { fieldname: file.fieldname });
+        },
+        key: function key(req, file, cb) {
+            cb(null, Date.now().toString() + '.' + file.originalname.split('.')[file.originalname.split('.').length - 1]);
+        }
+    })
+}).single('vfile');
 
 app.get('/', function (req, res) {
     var context = {
@@ -211,7 +235,7 @@ app.post('/registerVideo', function (req, res) {
             originalFileNm = file.originalname;;
             savedFileNm = file.filename;
             fileSize = file.size;
-            vfile = savedFileNm;
+            vfile = file.location;
             mType = file.mimetype;
 
             if (fileSize > maxFileSize) {
