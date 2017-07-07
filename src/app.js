@@ -5,11 +5,14 @@ import ejs from 'ejs';
 import session from 'express-session';
 import cookieParser from 'cookie-parser';
 import url from 'url';
-import multer from 'multer';
 
 import mongoose from 'mongoose';
 import Board from './models/Board';
 import Admin from './models/Admin';
+
+import aws from 'aws-sdk';
+import multer from 'multer';
+import multerS3 from 'multer-s3';
 
 import expressErrorHandler from 'express-error-handler';
 
@@ -20,6 +23,10 @@ import herokuConfig from '../herokuConfig'
 
 const app = express();
 const port = 8083;
+//const S3_BUKET = 'visitseoul';
+const S3_BUKET = process.env.S3_BUKET;
+
+const s3 = new aws.S3();
 
 //app.use(morgan('dev'));
 
@@ -48,25 +55,38 @@ app.use(session({
 }));
 
 app.use('/', express.static(path.join(__dirname, '../static')));
-app.use('/uploads', express.static(path.join(__dirname, '../uploads')));
+//app.use('/uploads', express.static(path.join(__dirname, '../uploads')));
 
-const maxFileSize = 3 * 1000 * 1000;
-const filePath = path.join(__dirname, '../uploads');
-const storage = multer.diskStorage({
-    destination: (req, file, cb) => {
-        cb(null, filePath);
-    },
-    filename: (req, file, cb) => {
-        let tmpArr = file.originalname.split('.');
-        let idx = tmpArr.length - 1;
-        let ext = tmpArr[idx];
+//const maxFileSize = 3 * 1000 * 1000;
+// const filePath = path.join(__dirname, '../uploads');
+// const storage = multer.diskStorage({
+//     destination: (req, file, cb) => {
+//         cb(null, filePath);
+//     },
+//     filename: (req, file, cb) => {
+//         let tmpArr = file.originalname.split('.');
+//         let idx = tmpArr.length - 1;
+//         let ext = tmpArr[idx];
+//
+//         cb(null, file.fieldname + '_' + Date.now() + '.' + ext);
+//     }
+// });
 
-        cb(null, file.fieldname + '_' + Date.now() + '.' + ext);
-    }
-});
+const storage = {
+    storage: multerS3({
+        s3: s3,
+        buket: S3_BUKET,
+        metadata: (req, file, cb) => {
+            cb(null, {fieldname: file.fielname});
+        },
+        key: (req, file, cb) => {
+            cb(null, Data.now().toString());
+        }
+    })
+};
 
 //const upload = multer({storage: storage, limits:{fileSize: maxFileSize}}).single('vfile');
-const upload = multer({storage: storage}).single('vfile');
+const upload = multer(storage).single('vfile');
 
 app.get('/', (req, res) => {
     let context = {
@@ -125,9 +145,9 @@ app.post('/registerVideo', (req, res) => {
         let vfile = '';
         let mType = '';
 
+
         //todo
         //에러 페이지
-        console.log(movType);
         if(movType === 'file'){
             file = req.file;
             originalFileNm = file.originalname;;

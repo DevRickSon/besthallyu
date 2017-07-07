@@ -28,10 +28,6 @@ var _url = require('url');
 
 var _url2 = _interopRequireDefault(_url);
 
-var _multer = require('multer');
-
-var _multer2 = _interopRequireDefault(_multer);
-
 var _mongoose = require('mongoose');
 
 var _mongoose2 = _interopRequireDefault(_mongoose);
@@ -43,6 +39,18 @@ var _Board2 = _interopRequireDefault(_Board);
 var _Admin = require('./models/Admin');
 
 var _Admin2 = _interopRequireDefault(_Admin);
+
+var _awsSdk = require('aws-sdk');
+
+var _awsSdk2 = _interopRequireDefault(_awsSdk);
+
+var _multer = require('multer');
+
+var _multer2 = _interopRequireDefault(_multer);
+
+var _multerS = require('multer-s3');
+
+var _multerS2 = _interopRequireDefault(_multerS);
 
 var _expressErrorHandler = require('express-error-handler');
 
@@ -61,6 +69,10 @@ var app = (0, _express2.default)();
 //import localConfig from '../localConfig';
 
 var port = 8083;
+//const S3_BUKET = 'visitseoul';
+var S3_BUKET = process.env.S3_BUKET;
+
+var s3 = new _awsSdk2.default.S3();
 
 //app.use(morgan('dev'));
 
@@ -89,25 +101,38 @@ app.use((0, _expressSession2.default)({
 }));
 
 app.use('/', _express2.default.static(_path2.default.join(__dirname, '../static')));
-app.use('/uploads', _express2.default.static(_path2.default.join(__dirname, '../uploads')));
+//app.use('/uploads', express.static(path.join(__dirname, '../uploads')));
 
-var maxFileSize = 3 * 1000 * 1000;
-var filePath = _path2.default.join(__dirname, '../uploads');
-var storage = _multer2.default.diskStorage({
-    destination: function destination(req, file, cb) {
-        cb(null, filePath);
-    },
-    filename: function filename(req, file, cb) {
-        var tmpArr = file.originalname.split('.');
-        var idx = tmpArr.length - 1;
-        var ext = tmpArr[idx];
+//const maxFileSize = 3 * 1000 * 1000;
+// const filePath = path.join(__dirname, '../uploads');
+// const storage = multer.diskStorage({
+//     destination: (req, file, cb) => {
+//         cb(null, filePath);
+//     },
+//     filename: (req, file, cb) => {
+//         let tmpArr = file.originalname.split('.');
+//         let idx = tmpArr.length - 1;
+//         let ext = tmpArr[idx];
+//
+//         cb(null, file.fieldname + '_' + Date.now() + '.' + ext);
+//     }
+// });
 
-        cb(null, file.fieldname + '_' + Date.now() + '.' + ext);
-    }
-});
+var storage = {
+    storage: (0, _multerS2.default)({
+        s3: s3,
+        buket: S3_BUKET,
+        metadata: function metadata(req, file, cb) {
+            cb(null, { fieldname: file.fielname });
+        },
+        key: function key(req, file, cb) {
+            cb(null, Data.now().toString());
+        }
+    })
+};
 
 //const upload = multer({storage: storage, limits:{fileSize: maxFileSize}}).single('vfile');
-var upload = (0, _multer2.default)({ storage: storage }).single('vfile');
+var upload = (0, _multer2.default)(storage).single('vfile');
 
 app.get('/', function (req, res) {
     var context = {
@@ -181,7 +206,6 @@ app.post('/registerVideo', function (req, res) {
 
         //todo
         //에러 페이지
-        console.log(movType);
         if (movType === 'file') {
             file = req.file;
             originalFileNm = file.originalname;;
