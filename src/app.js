@@ -56,7 +56,9 @@ app.use(session({
 
 app.use('/', express.static(path.join(__dirname, '../static')));
 
+const maxFileSize = 3 * 1024 * 1024;
 const upload = multer({
+    limits: {fileSize: maxFileSize},
     storage: multerS3({
         s3: s3,
         bucket: S3_BUCKET,
@@ -111,7 +113,12 @@ app.get('/checkEmail', (req, res) => {
 
 app.post('/registerVideo', (req, res) => {
     upload(req, res, (err) => {
-        if(err) throw err;
+        if(err){
+            return req.app.render('error', {message: '3MB 이하의 동영상 파일만 업로드 가능합니다'}, (err, html) => {
+                if(err) throw err;
+                res.end(html);
+            });
+        }
 
         let { ufirst, ulast, unation, usns1, usns2, uemail, uvisit, upassport, uvisa, ucancel, movType, vurl, vname, vorigin } = req.body;
         let uname = ufirst + ' ' + ulast;
@@ -119,23 +126,15 @@ app.post('/registerVideo', (req, res) => {
         if(typeof usns2 !== 'undefined') usns += ', ' + usns2
 
         let file = null;
-        let fileSize = 0;
-        let maxFileSize = 3 * 1000 * 1000;
         let vfile = '';
         let mType = '';
 
         if(movType === 'file'){
             file = req.file;
-            fileSize = file.size;
             vfile = file.location;
             mType = file.mimetype;
 
-            if(fileSize > maxFileSize){
-                return req.app.render('error', {message: '파일 사이즈는 3MB 이하로 등록 가능합니다'}, (err, html) => {
-                    if(err) throw err;
-                    res.end(html);
-                });
-            }else if(mType.indexOf('video') === -1){
+            if(mType.indexOf('video') === -1){
                 return req.app.render('error', {message: '동영상 파일만 등록 가능합니다.'}, (err, html) => {
                     if(err) throw err;
                     res.end(html);
