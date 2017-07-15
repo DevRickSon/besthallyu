@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="ko">
+<html lang="en">
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no">
@@ -16,73 +16,81 @@
             <fieldset>
             <legend></legend>
                 <ul class="frm">
-                    <li>
-                        <label for="ufirst" class="txt">이름</label>
-                        <input type="text" name="ufirst" id="ufirst" placeholder="first name" />
-                        <input type="text" name="ulast" placeholder="last name" />
-                    </li>
-                    <li>
-                        <label for="unation" class="txt">국적</label>
-                        <input type="text" name="unation" id="unation" />
-                    </li>
-                    <li>
-                        <label for="usns1" class="txt">SNS</label>
-                            <input type="text" name="usns1" id="usns1" />
-                        <input type="text" name="usns2" />
-                    </li>
-                    <li>
-                        <label for="uemail" class="txt">EMAIL</label>
-                        <input type="text" name="uemail" id="uemail" />
-                        <a href="#" class="btn_chk_email">중복확인</a><!-- todo 유효성 체크 -->
-                    </li>
-                    <li>
-                        <span class="label txt">한국 방문 경험</span>
-                        <span class="wrp_radio">
-                            <input type="radio" name="uvisit" id="uvisit1" value="1회" checked="checked" />
-                            <label for="uvisit1" class="radio">1회</label>
-                            <input type="radio" name="uvisit" id="uvisit2" value="2회" />
-                            <label for="uvisit2" class="radio">2회</label>
-                            <input type="radio" name="uvisit" id="uvisit3" value="3회" />
-                            <label for="uvisit3" class="radio">3회</label>
-                            <span class="inbl">
-                                <input type="radio" name="uvisit" id="uvisit4" value="4회 이상" />
-                                <label for="uvisit4" class="radio">4회 이상</label>
-                            </span>
+                    <li class="name">
+                        <label for="ufirst" class="txt">1. Enter Your name</label>
+                        <span class="wrp_inpt name">
+                            <input type="text" name="ufirst" id="ufirst" placeholder="Given name" />
+                            <input type="text" name="ulast" placeholder="Family name" />
                         </span>
                     </li>
-                    <li>
-                        <span class="label txt">여권 보유 여부</span>
+                    <li class="nationality">
+                        <label for="unation" class="txt">2. Nationality</label>
+                        <span class="wrp_inpt">
+                            <input type="text" name="unation" id="unation" />
+                        </span>
+                    </li>
+                    <li class="sns">
+                        <label for="usns1" class="txt">4. SNS (Youtube, Instagram, etc)</label>
+                        <span class="wrp_inpt">
+                            <input type="text" name="usns1" id="usns1" />
+                            <input type="text" name="usns2" />
+                        </span>
+                    </li>
+                    <li class="email">
+                        <label for="uemail" class="txt">5. Enter Your E-mail Address</label>
+                        <span class="wrp_inpt">
+                            <input type="text" name="uemail" id="uemail" />
+                        </span>
+                        <!-- <a href="#" class="btn_chk_email">중복확인</a> -->
+                    </li>
+                    <li class="visit">
+                        <span class="label txt">6. How many times have you visited Korea?</span>
                         <span class="wrp_radio">
+                            <input type="radio" name="uvisit" id="uvisitN" value="없음" checked="checked" />
+                            <label for="uvisitN" class="radio">N/A</label>
+                            <input type="radio" name="uvisit" id="uvisit1" value="1회" />
+                            <label for="uvisit1" class="radio">1 time</label>
+                            <input type="radio" name="uvisit" id="uvisit2" value="2회" />
+                            <label for="uvisit2" class="radio">2 time</label>
+                            <input type="radio" name="uvisit" id="uvisit3" value="3회" />
+                            <label for="uvisit3" class="radio">3 times</label>
+                            <input type="radio" name="uvisit" id="uvisit4" value="4회 이상" />
+                            <label for="uvisit4" class="radio">More than 4 times</label>
+                        </span>
+                    </li>
+                    <li class="visa">
+                        <span class="label txt">7. Do you have a valid passport?</span>
+                        <span class="wrp_radio passport">
                             <input type="radio" name="upassport" id="upassport1" value="YES" checked="checked" />
                             <label for="upassport1" class="radio">YES</label>
                             <input type="radio" name="upassport" id="upassport2" value="NO" />
                             <label for="upassport2" class="radio">NO</label>
                         </span>
                     </li>
-                    <li>
-                        <span class="label txt">한국 비자 보유 여부</span>
+                    <li class="visa">
+                        <span class="label txt">8. Do you have a visa to visit Korea?</span>
                         <span class="wrp_radio">
                             <input type="radio" name="uvisa" id="uvisa1" value="YES" checked="checked" />
                             <label for="uvisa1" class="radio">YES</label>
                             <input type="radio" name="uvisa" id="uvisa2" value="NO" />
                             <label for="uvisa2" class="radio">NO</label>
-                            <span class="inbl">
-                                <input type="radio" name="uvisa" id="uvisa3" value="무비자 입국가능" />
-                                <label for="uvisa3" class="radio none">무비자 입국가능</label>
-                            </span>
+                            <input type="radio" name="uvisa" id="uvisa3" value="무비자 입국가능" />
+                            <label for="uvisa3" class="radio none">I am eligible for visa-free entry</label>
                         </span>
                     </li>
-                    <li>
-                        <span class="label txt">한국 출입국 결격사유 유무</span>
+                    <li class="visit">
+                        <span class="label txt cancel">9. Is there any reason you may be refused entry to Korea?</span>
                         <span class="wrp_radio">
                             <input type="radio" name="ucancel" id="ucancel1" value="있음" checked="checked" />
-                            <label for="ucancel1" class="radio">있음</label>
+                            <label for="ucancel1" class="radio">I am able to visit Korea</label>
                             <input type="radio" name="ucancel" id="ucancel2" value="없음" />
-                            <label for="ucancel2" class="radio">없음</label>
+                            <label for="ucancel2" class="radio">I cannot visit Korea</label>
                             <input type="radio" name="ucancel" id="ucancel3" value="잘 모름" />
-                            <label for="ucancel3" class="radio">잘 모름</label>
+                            <label for="ucancel3" class="radio">Unsure</label>
                         </span>
                     </li>
+                </ul>
+                <ul>
                     <li>
                         <label for="vurl" class="txt">동영상</label>
                         <span class="wrp_lbl">

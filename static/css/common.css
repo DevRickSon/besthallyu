@@ -2,8 +2,8 @@
 
 /*reset*/
 body,div,dl,dt,dd,ul,ol,li,h1,h2,h3,h4,h5,h6,pre,form,fieldset,legend,textarea,p,th,td,input,select,textarea,button{margin:0;padding:0}
-body,h1,h2,h3,h4,th,td,input,select,textarea,button{font-family:"Malgun Gothic",Helvetica,AppleSDGothicNeo,sans-serif;font-size:14px;line-height:1.5;color:#333}
-body{background-color:#fff;text-align:center;*word-break:break-all;-ms-word-break:break-all}
+body,h1,h2,h3,h4,th,td,input,select,textarea,button{font-family:Helvetica,AppleSDGothicNeo,sans-serif;font-size:14px;line-height:1.5;color:#333}
+body{background-color:#0099e2;text-align:center;*word-break:break-all;-ms-word-break:break-all}
 img,fieldset,iframe{border:0 none}
 dl,ul,ol,menu,li {list-style:none}
 i,em,address,var{font-style:normal}
@@ -22,18 +22,50 @@ div{text-align:left}
 .blind{display:block !important;overflow:hidden !important;position:absolute !important;left:0 !important;top:-10000px !important;width:0 !important;height:0 !important}
 
 /* layout */
-.wrap{width:80%;max-width:520px;margin:0 auto}
+.wrap{width:85%;max-width:544px;margin:0 auto}
 
 .header{padding:30px 0 20px}
 h1{font-size:20px;}
 
 .container{padding-bottom:40px}
-.frm li{padding-top:15px}
+.frm{padding:5%;background:#fff}
+.frm li{padding-top:10px;*zoom:1}
+.frm li:after{content:'';display:block;clear:both}
 .frm li:first-child{padding-top:0}
-.frm li label,.frm li span.label{display:inline-block;width:160px;vertical-align:middle}
-.frm li label.radio{width:55px}
-.frm li label.radio.none{width:103px}
-.frm li input[type=text]{padding-left:10px;border:1px solid #dbdbdb}
+.frm li label,.frm li span.label{float:left;width:160px;height:30px;line-height:30px;vertical-align:middle;font-size:17px;font-weight:bold;color:#0099e2;letter-spacing:-1px}
+.frm li span.wrp_inpt{float:right}
+
+.frm li.name label{width:44%}
+.frm li.name .wrp_inpt{width:56%}
+.frm li.name .wrp_inpt input{float:right;width:48%;text-align:center}
+.frm li.name .wrp_inpt input:first-child{float:left}
+
+.frm li.nationality label{width:44%}
+.frm li.nationality .wrp_inpt{width:56%}
+.frm li.nationality .wrp_inpt input{width:100%}
+
+.frm li.sns label{width:100%}
+.frm li.sns .wrp_inpt{width:96%;padding-left:4%}
+.frm li.sns .wrp_inpt input{display:block;width:100%}
+.frm li.sns .wrp_inpt input:first-child{margin-bottom:5px}
+
+.frm li.email label{width:100%}
+.frm li.email .wrp_inpt{width:96%;padding-left:4%}
+.frm li.email .wrp_inpt input{display:block;width:100%}
+
+.frm li label.radio{display:inline-block;width:auto;padding:0 3%;border-radius:15px;border:1px solid #0099e2;font-size:15px;font-weight:normal}
+.frm li input[type=radio]{display:none}
+
+.frm li.visit span.label{width:100%}
+.frm li.visit .wrp_radio{display:block;width:96%;padding-left:4%;text-align:right}
+.frm li.visit .wrp_radio label{display:inline-block;margin-left:2%;float:none}
+
+.frm li.visa span.label{width:100%}
+.frm li.visa label.radio{padding:0 4%}
+.frm li.visa .wrp_radio{display:block;width:96%;padding-left:4%;text-align:right}
+.frm li.visa .wrp_radio label{display:inline-block;margin-left:1%;float:none}
+
+.frm li input[type=text]{height:29px;line-height:29px;border-bottom:1px solid #0099e2;border-width:0 0 1px 0;border-radius:0;font-size:17px;letter-spacing:-1px}
 .frm li .inbl{display:inline-block}
 .frm .wrp_lbl{display:inline-block;border:1px solid #ccc;*zoom:1;vertical-align:middle}
 .frm .wrp_lbl:after{content:'';display:block;clear:both}
@@ -53,12 +85,23 @@ h1{font-size:20px;}
 .wrp_success h1{padding-bottom:20px}
 .wrp_success a{display:inline-block;padding:3px 10px;border:1px solid #ccc;-webkit-border-radius:5px;border-radius:5px;background:#f9f9f9}
 
-@media only screen and (max-width:420px){
+@media only screen and (max-width:500px){
     .wrap{width:92%;margin:0 auto}
-    .frm li label.txt,.frm li span.label.txt{display:block;width:100%;}
-    .frm li input[type=text]{display:block;width:97%;padding-left:3%;margin-top:5px}
-    .frm li .or{display:block}
-    .frm li .wrp_radio{display:block}
+    .frm li label.txt,.frm li span.label.txt{display:block;font-size:14px}
+    .frm li input[type=text]{display:block;width:97%;font-size:14px}
+
+    .frm li label.radio{padding:0 2%;font-size:12px}
+
+    .frm li.visit .wrp_radio label{margin-left:5px}
+}
+
+@media only screen and (max-width:375px){
+    .frm li span.label.cancel{height:60px;line-height:25px}
+}
+
+@media only screen and (max-width:320px){
+    .frm li label.radio{padding:0 1.5%}
+    .frm li.visit .wrp_radio label{margin-left:0}
 }
 
 /* admin */
