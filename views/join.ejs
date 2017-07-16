@@ -9,12 +9,50 @@
 <body>
 <div class="wrap">
     <div class="header">
-        <h1>VIST SEOUL 참여하기</h1>
+        <h1 class="blind">VIST SEOUL 참여하기</h1>
     </div>
     <div class="container">
         <form method="post" action="/registerVideo" enctype="multipart/form-data">
             <fieldset>
             <legend></legend>
+                <ul class="frm_mov">
+                    <li>
+                        <div class="wrp_top">
+                            <label for="vurl" class="txt"><span class="ico"><img src="/images/ico_n1.gif" alt="1" /></span>Enter Video URL</label>
+                            <input type="text" name="vurl" class="movTarget" id="vurl" title="동영상 URL입력" />
+                        </div>
+                        <div class="wrp_up">
+                            <p class="area_up">
+                                <span>Or upload a your video/picture</span>
+                                <a href="#" class="vfile"><img src="/images/btn_browse.gif" alt="browse" /></a>
+                                <input type="file" name="vfile" class="movTarget" id="vfile" title="동영상 선택" />
+                            </p>
+                            <p class="area_notice">* Choose between url or file upload / * Only 1 file can be uploaded</p>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="wrp_top">
+                            <label for="vname" class="txt"><span class="ico"><img src="/images/ico_n2.gif" alt="2" /></span>Title</label></label>
+                            <input type="text" name="vname" id="vname" />
+                        </div>
+                    </li>
+                    <li>
+                        <div class="wrp_top">
+                            <label for="vdesc" class="txt"><span class="ico"><img src="/images/ico_n3.gif" alt="3" /></span>Entry summary</label></label>
+                            <textarea name="vdesc" id="vdesc" /></textarea>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="wrp_top">
+                            <label for="vorigin" class="txt">
+                                <span class="ico"><img src="/images/ico_n4.gif" alt="4" /></span>Title of the original Hallyu content
+                                <span class="br">(ex: a scene from the K-Drama "Goblln")</span>
+                            </label>
+                            <input type="text" name="vorigin" id="vorigin" class="vorigin" />
+                        </div>
+                    </li>
+                </ul>
+
                 <ul class="frm">
                     <li class="name">
                         <label for="ufirst" class="txt">1. Enter Your name</label>
@@ -90,38 +128,18 @@
                         </span>
                     </li>
                 </ul>
-                <ul>
-                    <li>
-                        <label for="vurl" class="txt">동영상</label>
-                        <span class="wrp_lbl">
-                            <input type="radio" name="movType" id="movType1" value="url" />
-                            <label for="movType1" class="movType">URL</label>
-                            <input type="radio" name="movType" id="movType2" value="file" />
-                            <label for="movType2" class="movType">파일</label>
-                        </span>
-                        <input type="text" name="vurl" class="movTarget" id="vurl" title="동영상 URL입력" />
-                        <input type="file" name="vfile" class="movTarget" id="vfile" title="동영상 선택" />
-                    </li>
-                    <li>
-                        <label for="vname" class="txt">출품명</label></label>
-                        <input type="text" name="vname" id="vname" />
-                    </li>
-                    <li>
-                        <label for="vorigin" class="txt">한류 컨텐츠 원제목</label>
-                        <input type="text" name="vorigin" id="vorigin" />
-                    </li>
-                </ul>
+
                 <div class="notice">
                     <p>
-                        입력하신 개인정보는 이벤트 참여를 위해서만 활용되며, 기타 목적으로 저장되거나 제3자에게 제공되지 않습니다.
-                        정보 제공에 동의하십니까?
+                        All personal information shall be kept confidential and used strictly for the purposes of this event. Information will not be stored or shared with third parties. Do you agree to
+                        submit your personal information?
                     </p>
                     <p class="chk">
                         <input type="checkbox" name="agree" id="agree" />
                         <label for="agree">YES</label>
                     </p>
                 </div>
-                <p class="btn"><input type="submit" class="sbm" value="제출하기" /></p>
+                <p class="btn"><a href="#" class="sbm"><img src="/images/btn_submit.gif" alt="submit" /></a></p>
             </fieldset>
         </form>
     </div>
@@ -253,34 +271,6 @@
             return false;
         }
     });
-
-    var movType = $('.movType');
-    var current = null;
-
-    movType.each(function(a){
-        var self = $(this),
-            target = $('.movTarget');
-
-        self.data('target', target.eq(a));
-
-        if(a === 0) active(self);
-    });
-
-    movType.on('click', function(e){
-        if(current) deactive(current);
-        active($(this));
-    });
-
-    function active(item){
-        item.data('target').show();
-        item.addClass('on');
-        current = item;
-    }
-
-    function deactive(item){
-        item.data('target').hide();
-        item.removeClass('on');
-    }
 }(jQuery));
 </script>
 </body>
