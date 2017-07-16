@@ -62,6 +62,11 @@ h1{font-size:20px;}*/
 .frm li.nationality .wrp_inpt{width:56%}
 .frm li.nationality .wrp_inpt input{width:100%}
 
+.frm li.city label{width:100%}
+.frm li.city .wrp_inpt{width:96%;padding-left:4%}
+.frm li.city .wrp_inpt input{float:right;width:48%;text-align:center}
+.frm li.city .wrp_inpt input:first-child{float:left}
+
 .frm li.sns label{width:100%}
 .frm li.sns .wrp_inpt{width:96%;padding-left:4%}
 .frm li.sns .wrp_inpt input{display:block;width:100%}
