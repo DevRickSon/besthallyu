@@ -19,38 +19,45 @@ var Schema = _mongoose2.default.Schema;
 _mongooseAutoIncrement2.default.initialize(_mongoose2.default.connection);
 
 var Board = new Schema({
+    vurl: String,
+    vfile: String,
+    vname: String,
+    vdesc: String,
+    vorigin: String,
     uname: String,
     unation: String,
+    ucity: String,
+    ucountry: String,
     usns: String,
     uemail: String,
     uvisit: String,
     upassport: String,
     uvisa: String,
     ucancel: String,
-    vurl: String,
-    vfile: String,
-    vname: String,
-    vorigin: String,
     date: {
         type: Date,
         default: Date.now
     }
 });
 
-Board.statics.create = function (uname, unation, usns, uemail, uvisit, upassport, uvisa, ucancel, vurl, vfile, vname, vorigin) {
+//추가 요소
+Board.statics.create = function (vurl, vfile, vname, vdesc, vorigin, uname, unation, ucity, ucountry, usns, uemail, uvisit, upassport, uvisa, ucancel) {
     var board = new this({
+        vurl: vurl,
+        vfile: vfile,
+        vname: vname,
+        vdesc: vdesc,
+        vorigin: vorigin,
         uname: uname,
         unation: unation,
+        ucity: ucity,
+        ucountry: ucountry,
         usns: usns,
         uemail: uemail,
         uvisit: uvisit,
         upassport: upassport,
         uvisa: uvisa,
-        ucancel: ucancel,
-        vurl: vurl,
-        vfile: vfile,
-        vname: vname,
-        vorigin: vorigin
+        ucancel: ucancel
     });
 
     return board.save();

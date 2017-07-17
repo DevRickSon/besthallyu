@@ -165,41 +165,32 @@ app.post('/registerVideo', function (req, res) {
         }
 
         var _req$body = req.body,
+            vurl = _req$body.vurl,
+            vname = _req$body.vname,
+            vdesc = _req$body.vdesc,
+            vorigin = _req$body.vorigin,
             ufirst = _req$body.ufirst,
             ulast = _req$body.ulast,
             unation = _req$body.unation,
+            ucity = _req$body.ucity,
+            ucountry = _req$body.ucountry,
             usns1 = _req$body.usns1,
             usns2 = _req$body.usns2,
             uemail = _req$body.uemail,
             uvisit = _req$body.uvisit,
             upassport = _req$body.upassport,
             uvisa = _req$body.uvisa,
-            ucancel = _req$body.ucancel,
-            movType = _req$body.movType,
-            vurl = _req$body.vurl,
-            vname = _req$body.vname,
-            vorigin = _req$body.vorigin;
+            ucancel = _req$body.ucancel;
 
         var uname = ufirst + ' ' + ulast;
         var usns = usns1;
         if (typeof usns2 !== 'undefined') usns += ', ' + usns2;
 
-        var file = null;
+        var file = req.file;
         var vfile = '';
-        var mType = '';
 
-        if (movType === 'file') {
-            file = req.file;
+        if (typeof file !== 'undefined') {
             vfile = file.location;
-            mType = file.mimetype;
-
-            if (mType.indexOf('video') === -1) {
-                return req.app.render('error', { message: '동영상 파일만 등록 가능합니다.' }, function (err, html) {
-                    if (err) throw err;
-                    res.end(html);
-                });
-            }
-
             vurl = '';
         } else {
             vfile = '';
@@ -213,7 +204,7 @@ app.post('/registerVideo', function (req, res) {
             console.error(err);
         };
 
-        _Board2.default.create(uname, unation, usns, uemail, uvisit, upassport, uvisa, ucancel, vurl, vfile, vname, vorigin).then(respond).catch(onError);
+        _Board2.default.create(vurl, vfile, vname, vdesc, vorigin, uname, unation, ucity, ucountry, usns, uemail, uvisit, upassport, uvisa, ucancel).then(respond).catch(onError);
     });
 });
 
