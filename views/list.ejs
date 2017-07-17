@@ -5,7 +5,7 @@
 <title></title>
 <link rel="stylesheet" type="text/css" href="/css/common.css" />
 </head>
-<body>
+<body class="admin">
 <div class="wrap admin">
     <div class="wrp_header">
         <div class="header admin">
@@ -18,34 +18,18 @@
             <caption>참여자 목록</caption>
             <colgroup>
                 <col width="3%" />
-                <col width="9%" />
-                <col width="9%" />
-                <col width="9%" />
-                <col width="9%" />
-                <col width="9%" />
-                <col width="9%" />
-                <col width="9%" />
-                <col width="9%" />
-                <col width="4%" />
-                <col width="4%" />
-                <col width="4%" />
-                <col width="4%" />
-                <col width="7%" />
+                <col width="25%" />
+                <col width="25%" />
+                <col width="25%" />
+                <col width="12%" />
+                <col width="10%" />
             </colgroup>
             <thead>
                 <th scope="col">번호</th>
-                <th scope="col">url</th>
-                <th scope="col">파일</th>
                 <th scope="col">컨텐츠명</th>
                 <th scope="col">원본</th>
-                <th scope="col">이름</th>
-                <th scope="col">국적</th>
-                <th scope="col">sns</th>
-                <th scope="col">이메일</th>
-                <th scope="col">방문수</th>
-                <th scope="col">여권</th>
-                <th scope="col">비자</th>
-                <th scope="col">결격사유</th>
+                <th scope="col">url</th>
+                <th scope="col">파일</th>
                 <th scope="col">등록시간</th>
             </thead>
             <tbody>
@@ -69,26 +53,43 @@
 
                         var time = y + '/' + m + '/' + dy + ' ' + h + ':' + m + ':' + s;
                 %>
-                <tr>
-                    <td class="alc"><%= board.num %></td>
-                    <td><%= board.vurl %></td>
-                    <td>
-                        <% if(board.vfile !== ''){ %>
-                            <a href="<%= board.vfile %>">다운로드</a>
-                        <% } %>
-                    </td>
-                    <td><%= board.vname %></td>
-                    <td><%= board.vorigin %></td>
-                    <td><%= board.uname %></td>
-                    <td><%= board.unation %></td>
-                    <td><%= board.usns %></td>
-                    <td><%= board.uemail %></td>
-                    <td class="alc"><%= board.uvisit %></td>
-                    <td class="alc"><%= board.upassport %></td>
-                    <td class="alc"><%= board.uvisa %></td>
-                    <td class="alc"><%= board.ucancel %></td>
-                    <td class="alc"><%= time %></td>
-                </tr>
+                    <tr class="nav">
+                        <td class="alc"><%= board.num %></td>
+                        <td><%= board.vname %></td>
+                        <td><%= board.vorigin %></td>
+                        <td>
+                            <% if(board.vurl !== ''){ %>
+                                <a href="<%= board.vurl %>" target="_blank"><%= board.vurl %></a>
+                            <% }else{ %>
+                                -
+                            <% } %>
+                        </td>
+                        <td class="alc">
+                            <% if(board.vfile !== ''){ %>
+                                <a href="<%= board.vfile %>">다운로드</a>
+                            <% }else{ %>
+                                -
+                            <% } %>
+                        </td>
+                        <td class="alc"><%= time %></td>
+                    </tr>
+                    <tr class="cont">
+                        <td colspan="6">
+                            <ul>
+                                <li>이름 : <%= board.uname %></li>
+                                <li>국적 : <%= board.unation %></li>
+                                <li>도시 : <%= board.ucity %></li>
+                                <li>시/도 : <%= board.ucountry %></li>
+                                <li>SNS : <%= board.usns %></li>
+                                <li>이메일 : <%= board.uemail %></li>
+                                <li>방문수 : <%= board.uvisit %></li>
+                                <li>여권 : <%= board.upassport %></li>
+                                <li>비자 : <%= board.uvisa %></li>
+                                <li>결격사유 : <%= board.ucancel %></li>
+                                <li>영상 설명 : <%= board.vdesc %></li>
+                            </ul>
+                        </td>
+                    </tr>
                 <% } %>
             </tbody>
         </table>

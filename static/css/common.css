@@ -108,9 +108,9 @@ h1{font-size:20px;}*/
 .btn .sbm{display:inline-block;width:30%}
 .btn .sbm img{width:100%}
 
-.wrp_success{position:absolute;left:50%;top:50%;width:300px;margin-left:-151px;margin-top:-46px;padding:20px 0;border:1px solid #ccc;text-align:center}
-.wrp_success h1{padding-bottom:20px}
-.wrp_success a{display:inline-block;padding:3px 10px;border:1px solid #ccc;-webkit-border-radius:5px;border-radius:5px;background:#f9f9f9}
+.wrp_success{position:absolute;left:50%;top:50%;width:320px;margin-left:-160px;margin-top:-114px}
+.wrp_success a{display:block;width:100%}
+.wrp_success a img{width:100%}
 
 .indc{display:none;position:fixed;left:0;top:0;width:100%;height:100%;z-index:9999}
 .indc .overlay{width:100%;height:100%;background:url('/images/bg_indicator.png')}
@@ -143,19 +143,20 @@ h1{font-size:20px;}*/
 }
 
 /* admin */
+body.admin{background:#fff}
 .wrap.admin{width:100%;max-width:100%}
 .wrp_header{background:#f9f9f9;border-bottom:2px solid #ccc}
 .header.admin{width:94%;margin:0 auto}
 .wrp_cnt{font-size:14px}
 .wrp_cnt .cnt{font-weight:bold}
 
-.container.admin{width:94%;margin:0 auto}
-.wrp_login{position:relative;width:275px;margin:150px auto;padding:30px;border:1px solid #ebebeb}
+.container.admin{width:94%;margin:0 auto;padding:0}
+.wrp_login{position:relative;width:275px;margin:150px auto;padding:30px;border:1px solid #ebebeb;font-size:14px}
 .frm_login li{margin-top:5px}
 .frm_login li label{display:inline-block;width:60px}
 .frm_login li input{width:150px}
 .wrp_login .btn_login{position:absolute;right:30px;top:35px}
-.wrp_login .btn_login a{display:block;width:53px;height:53px;line-height:53px;border:1px solid #ccc;background:#f9f9f9;text-align:center}
+.wrp_login .btn_login a{display:block;width:53px;height:65px;line-height:65px;border:1px solid #ccc;background:#f9f9f9;text-align:center}
 .wrp_login p.err{margin-top:20px;text-align:center}
 
 .lists{width:100%;margin-top:40px;border-bottom:1px solid #ccc}
@@ -165,6 +166,11 @@ h1{font-size:20px;}*/
 .lists th,.lists td.alc{text-align:center;padding-left:0}
 .lists th{border-top:1px solid #ccc;border-bottom:2px solid #ccc}
 .lists td{border-top:1px solid #ddd;padding-left:5px}
+.lists tr.cont td{background:#f9f9f9;font-size:14px}
+.lists tr.cont td ul{padding:10px;*zoom:1}
+.lists tr.cont td ul:after{content:'';display:block;clear:both}
+.lists tr.cont td ul li{float:left;width:50%;margin-bottom:5px}
+.lists tr.cont td ul li.desc{width:100%}
 
 .pagenation{margin-top:30px;text-align:center}
 .pagenation a,.pagenation span{display:inline-block;width:25px;height:25px;line-height:25px;border:1px solid #ddd;margin:0 3px;text-align:center}

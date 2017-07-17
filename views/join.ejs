@@ -249,6 +249,27 @@
             return false;
         }
 
+        if(vfile.val() !== ''){
+            var tmp_arr = vfile.val().split('.'),
+                leng = tmp_arr.length,
+                ext = tmp_arr[leng-1].toLowerCase(),
+                ext_arr = ['mov', 'avi', 'mp4'],
+                ext_leng = ext_arr.length,
+                ext_flag = false;
+
+            for(var i=0; i< ext_leng; i++){
+                if(ext === ext_arr[i]){
+                    ext_flag = true;
+                    break;
+                }
+            }
+
+            if(!ext_flag){
+                alert('동영상 파일은 3MB 이하의 avi, mov, mp4 파일만 가능합니다.');
+                return false;
+            }
+        }
+
         if(vname.val() === ''){
             alert('출품명을 입력해 주세요');
             vname.focus();
