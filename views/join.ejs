@@ -19,13 +19,13 @@
                     <li>
                         <div class="wrp_top">
                             <label for="vurl" class="txt"><span class="ico"><img src="/images/ico_n1.gif" alt="1" /></span>Enter Video URL</label>
-                            <input type="text" name="vurl" class="movTarget" id="vurl" title="동영상 URL입력" />
+                            <input type="text" name="vurl" id="vurl" title="동영상 URL입력" />
                         </div>
                         <div class="wrp_up">
                             <p class="area_up">
                                 <span>Or upload a your video/picture</span>
                                 <a href="#" class="vfile"><img src="/images/btn_browse.gif" alt="browse" /></a>
-                                <input type="file" name="vfile" class="movTarget" id="vfile" title="동영상 선택" />
+                                <input type="file" name="vfile" id="vfile" title="browse a file" />
                             </p>
                             <p class="area_notice">* Choose between url or file upload / * Only 1 file can be uploaded</p>
                         </div>
@@ -151,19 +151,28 @@
         </form>
     </div>
 </div>
+
+<div class="indc">
+    <div class="overlay"></div>
+    <div class="cont">
+        <img src="/images/gif_loading.gif" alt="uploading...." />
+    </div>
+</div>
 <script src="/js/jquery-1.12.4.min.js"></script>
 <script>
 (function($){
     var ufirst = $('#ufirst');
     var ulast = $('input[name=ulast]');
     var unation = $('#unation');
+    var ucity = $('#ucity');
+    var ucountry = $('#ucountry');
     var usns1 = $('#usns1');
     var usns2 = $('input[name=usns2]');
     var uemail = $('#uemail');
-    var movType = $('input[name=movType]');
     var vurl = $('#vurl');
     var vfile = $('#vfile');
     var vname = $('#vname');
+    var vdesc = $('#vdesc');
     var vorigin = $('#vorigin');
     var agree = $('#agree');
 
@@ -171,40 +180,93 @@
     var emailFlag = false;
     var tmpEmail = '';
 
-    $('.btn_chk_email').on('click', function(e){
-        if(uemail.val() === ''){
-            alert('이메일을 입력해 주세요');
-            uemail.focus();
-            return false;
-        }else{
-            if(!emailRegEx.test(uemail.val())){
+    $('.wrp_radio').each(function(a){
+        radioUI($(this));
+    });
+
+    uemail.on('blur', function(e){
+        var self = $(this);
+
+        if(self.val() !== ''){
+            if(!emailRegEx.test(self.val())){
                 alert('이메일 형식이 바르지 않습니다.');
-                uemail.focus();
+                self.val('').focus();
                 return false;
             }
-        }
 
-        $.ajax({
-            type: 'GET',
-            url: '/checkEmail',
-            data: {uemail: uemail.val()},
-            dataType: 'json',
-            success: function(data){
-                alert(data.message);
-                emailFlag = true;
-                tmpEmail = uemail.val();
-            },
-            error: function(err){
-                alert(err.responseJSON.message);
-                emailFlag = false;
-                uemail.focus();
+            $.ajax({
+                type: 'GET',
+                url: '/checkEmail',
+                data: {uemail: self.val()},
+                dataType: 'json',
+                success: function(data){
+                    alert(data.message);
+                    emailFlag = true;
+                    tmpEmail = self.val();
+                },
+                error: function(err){
+                    alert(err.responseJSON.message);
+                    emailFlag = false;
+                    self.val('').focus();
+                }
+            });
+        }
+    });
+
+    vurl.on('focus', function(e){
+        if(vfile.val() !== ''){
+            var flag = confirm('동영상 URL 또는 파일 업로드 중 한가지 방식만 등록 가능합니다. URL입력시 선택하신 동영상 파일은 초기화 됩니다. URL을 입력 하세겠습니까?');
+
+            if(flag){
+                vfile.remove();
+                vfile = $('<input type="file" name="vfile" id="vfile" title="browse a file" />').appendTo('.area_up');
+            }else{
+                $(this).blur();
             }
-        });
+        }
+    });
+
+    $('.vfile').on('click', function(e){
+        if(vurl.val() !== ''){
+            var flag = confirm('동영상 URL 또는 파일 업로드 중 한가지 방식만 등록 가능합니다. 파일을 선택하시면 입력하신 URL은 초기화 됩니다. 파일을 선택 하시겠습니까?');
+
+            if(flag){
+                vurl.val('');
+                vfile.trigger('click');
+            }
+        }else{
+            vfile.trigger('click');
+        }
 
         return false;
     });
 
     $('.sbm').on('click', function(e){
+        //todo 확장자 제한
+        if(vurl.val() === '' && vfile.val() === ''){
+            alert('동영상 URL을 입력 또는 파일을 선택해 주세요');
+            vurl.focus();
+            return false;
+        }
+
+        if(vname.val() === ''){
+            alert('출품명을 입력해 주세요');
+            vname.focus();
+            return false;
+        }
+
+        if(vdesc.val() === ''){
+            alert('동영상 설명을 입력해 주세요');
+            vdesc.focus();
+            return false;
+        }
+
+        if(vorigin.val() === ''){
+            alert('한류 컨텐츠 원제목을 입력해 주세요');
+            vorigin.focus();
+            return false;
+        }
+
         if(ufirst.val() === ''){
             alert('이름을 입력해 주세요');
             ufirst.focus();
@@ -220,6 +282,18 @@
         if(unation.val() === ''){
             alert('국적을 입력해 주세요');
             unation.focus();
+            return false;
+        }
+
+        if(ucity.val() === ''){
+            alert('도시를 입력해 주세요');
+            ucity.focus();
+            return false;
+        }
+
+        if(ucountry.val() === ''){
+            alert('주를 입력해 주세요');
+            ucountry.focus();
             return false;
         }
 
@@ -246,38 +320,42 @@
             return false;
         }
 
-        if(current.attr('for') === 'movType1'){
-            if(vurl.val() === ''){
-                alert('동영상 URL을 입력해 주세요');
-                vurl.focus();
-                return false;
-            }
-        }else{
-            if(vfile.val() === ''){
-                alert('동영상 파일을 선택해 주세요');
-                vfile.focus();
-                return false;
-            }
-        }
-
-        if(vname.val() === ''){
-            alert('출품명을 입력해 주세요');
-            vname.focus();
-            return false;
-        }
-
-        if(vorigin.val() === ''){
-            alert('한류 컨텐츠 원제목을 입력해 주세요');
-            vorigin.focus();
-            return false;
-        }
-
         if(!agree.prop('checked')){
             alert('개인정보 취급 방식에 동의해주세요');
             agree.focus();
             return false;
         }
+
+        //todo indicator 추가
+        $('.indc').show();
+        $('form').submit();
     });
+
+    function radioUI(scope){
+        var radio = scope.find('label'),
+            input = scope.find('input'),
+            current = null;
+
+        radio.each(function(a){
+            if(input.eq(a).prop('checked')){
+                active($(this));
+            }
+        });
+
+        radio.on('click', function(e){
+            if(current) deactive(current);
+            active($(this));
+        });
+
+        function active(item){
+            item.addClass('on');
+            current = item;
+        }
+
+        function deactive(item){
+            item.removeClass('on');
+        }
+    }
 }(jQuery));
 </script>
 </body>

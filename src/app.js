@@ -120,27 +120,16 @@ app.post('/registerVideo', (req, res) => {
             });
         }
 
-        let { ufirst, ulast, unation, usns1, usns2, uemail, uvisit, upassport, uvisa, ucancel, movType, vurl, vname, vorigin } = req.body;
+        let { vurl, vname, vdesc, vorigin, ufirst, ulast, unation, ucity, ucountry, usns1, usns2, uemail, uvisit, upassport, uvisa, ucancel } = req.body;
         let uname = ufirst + ' ' + ulast;
         let usns = usns1;
         if(typeof usns2 !== 'undefined') usns += ', ' + usns2
 
-        let file = null;
+        let file = req.file;
         let vfile = '';
-        let mType = '';
 
-        if(movType === 'file'){
-            file = req.file;
+        if(typeof file !== 'undefined'){
             vfile = file.location;
-            mType = file.mimetype;
-
-            if(mType.indexOf('video') === -1){
-                return req.app.render('error', {message: '동영상 파일만 등록 가능합니다.'}, (err, html) => {
-                    if(err) throw err;
-                    res.end(html);
-                });
-            }
-
             vurl = '';
         }else{
             vfile = '';
@@ -154,7 +143,7 @@ app.post('/registerVideo', (req, res) => {
             console.error(err);
         }
 
-        Board.create(uname, unation, usns, uemail, uvisit, upassport, uvisa, ucancel, vurl, vfile, vname, vorigin)
+        Board.create(vurl, vfile, vname, vdesc, vorigin, uname, unation, ucity, ucountry, usns, uemail, uvisit, upassport, uvisa, ucancel)
              .then(respond)
              .catch(onError);
     });

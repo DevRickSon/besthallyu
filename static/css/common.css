@@ -88,6 +88,8 @@ h1{font-size:20px;}*/
 .frm li.visa .wrp_radio{display:block;width:96%;padding-left:4%;text-align:right}
 .frm li.visa .wrp_radio label{display:inline-block;margin-left:1%;float:none}
 
+.frm li .wrp_radio label.on{background:#f7b52c}
+
 .frm li input[type=text]{height:29px;line-height:29px;border-bottom:1px solid #0099e2;border-width:0 0 1px 0;border-radius:0;font-size:17px;letter-spacing:-1px}
 .frm li .inbl{display:inline-block}
 .frm .wrp_lbl{display:inline-block;border:1px solid #ccc;*zoom:1;vertical-align:middle}
@@ -100,7 +102,7 @@ h1{font-size:20px;}*/
 
 .notice{display:inline-block;padding:20px;background:#fff;font-size:13px}
 .notice .chk{margin-top:10px;text-align:center}
-.notice .chk input{border:1px solid #666;background:#fff;border-radius:0}
+.notice .chk input{display:inline-block;width:15px;height:15px;margin-right:3px;border:1px solid #666;background:#fff;border-radius:0}
 
 .btn{padding-top:10%;text-align:center}
 .btn .sbm{display:inline-block;width:30%}
@@ -110,6 +112,9 @@ h1{font-size:20px;}*/
 .wrp_success h1{padding-bottom:20px}
 .wrp_success a{display:inline-block;padding:3px 10px;border:1px solid #ccc;-webkit-border-radius:5px;border-radius:5px;background:#f9f9f9}
 
+.indc{display:none;position:fixed;left:0;top:0;width:100%;height:100%;z-index:9999}
+.indc .overlay{width:100%;height:100%;background:url('/images/bg_indicator.png')}
+.indc .cont{overflow:hidden;position:absolute;left:50%;top:50%;width:46px;height:46px;margin-left:-23px;margin-top:-23px;border-radius:10px}
 @media only screen and (max-width:500px){
     .wrap{width:92%;margin:0 auto}
 
@@ -130,7 +135,7 @@ h1{font-size:20px;}*/
     .frm li span.label.cancel{height:60px;line-height:25px}
 }
 
-@media only screen and (max-width:320px){
+@media only screen and (max-width:360px){
     .frm_mov .wrp_top label .br{top:20px}
     .frm_mov .wrp_up .area_up{font-size:13px}
     .frm li label.radio{padding:0 1.5%}

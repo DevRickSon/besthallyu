@@ -5,38 +5,45 @@ import autoIncrement from 'mongoose-auto-increment';
 autoIncrement.initialize(mongoose.connection);
 
 const Board = new Schema({
+    vurl: String,
+    vfile: String,
+    vname: String,
+    vdesc: String,
+    vorigin: String,
     uname: String,
     unation: String,
+    ucity: String,
+    ucountry: String,
     usns: String,
     uemail: String,
     uvisit: String,
     upassport: String,
     uvisa: String,
     ucancel: String,
-    vurl: String,
-    vfile: String,
-    vname: String,
-    vorigin: String,
     date: {
         type: Date,
         default: Date.now
     }
 });
 
-Board.statics.create = function(uname, unation, usns, uemail, uvisit, upassport, uvisa, ucancel, vurl, vfile, vname, vorigin){
+//추가 요소
+Board.statics.create = function(vurl, vfile, vname, vdesc, vorigin, uname, unation, ucity, ucountry, usns, uemail, uvisit, upassport, uvisa, ucancel){
     const board = new this({
+        vurl,
+        vfile,
+        vname,
+        vdesc,
+        vorigin,
         uname,
         unation,
+        ucity,
+        ucountry,
         usns,
         uemail,
         uvisit,
         upassport,
         uvisa,
-        ucancel,
-        vurl,
-        vfile,
-        vname,
-        vorigin
+        ucancel
     });
 
     return board.save();
