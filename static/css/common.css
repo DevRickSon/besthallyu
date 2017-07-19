@@ -31,6 +31,7 @@ h1{font-size:20px;}*/
 
 .frm_mov li{margin-top:15px}
 .frm_mov li:first-child{margin-top:0}
+.frm_mov input[type=text]{border:0 none}
 .frm_mov .wrp_top label{position:relative;display:block;width:100%;color:#f7b52c;font-weight:bold}
 .frm_mov .wrp_top label .ico{display:inline-block;width:7%;padding-right:2%;vertical-align:middle}
 .frm_mov .wrp_top label .ico img{width:100%}
@@ -88,6 +89,16 @@ h1{font-size:20px;}*/
 .frm li.visa .wrp_radio{display:block;width:96%;padding-left:4%;text-align:right}
 .frm li.visa .wrp_radio label{display:inline-block;margin-left:1%;float:none}
 
+.frm li.age span.label{float:left;width:20%}
+.frm li.age label.radio{padding:0 3%}
+.frm li.age .wrp_radio{float:right;width:80%;text-align:right}
+.frm li.age .wrp_radio label{display:inline-block;margin-left:1%;float:none}
+
+.frm li.sex span.label{float:left;width:30%}
+.frm li.sex label.radio{padding:0 10%}
+.frm li.sex .wrp_radio{float:right;width:70%;text-align:right}
+.frm li.sex .wrp_radio label{display:inline-block;margin-left:1%;float:none}
+
 .frm li .wrp_radio label.on{background:#f7b52c}
 
 .frm li input[type=text]{height:29px;line-height:29px;border-bottom:1px solid #0099e2;border-width:0 0 1px 0;border-radius:0;font-size:17px;letter-spacing:-1px}
@@ -133,6 +144,10 @@ h1{font-size:20px;}*/
 
 @media only screen and (max-width:375px){
     .frm li span.label.cancel{height:60px;line-height:25px}
+
+    .frm li.age span.label{float:none;width:100%}
+    .frm li.age .wrp_radio{float:none;display:block;width:96%;padding-left:4%;text-align:right}
+    .frm li.age .wrp_radio label{display:inline-block;margin-left:1%;float:none}
 }
 
 @media only screen and (max-width:360px){
@@ -140,6 +155,7 @@ h1{font-size:20px;}*/
     .frm_mov .wrp_up .area_up{font-size:13px}
     .frm li label.radio{padding:0 1.5%}
     .frm li.visit .wrp_radio label{margin-left:0}
+    .frm li.age label.radio{padding:0 2%}
 }
 
 /* admin */

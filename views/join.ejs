@@ -32,14 +32,14 @@
                     </li>
                     <li>
                         <div class="wrp_top">
-                            <label for="vname" class="txt"><span class="ico"><img src="/images/ico_n2.gif" alt="2" /></span>Title</label></label>
+                            <label for="vname" class="txt"><span class="ico"><img src="/images/ico_n2.gif" alt="2" /></span>Title</label>
                             <input type="text" name="vname" id="vname" />
                         </div>
                     </li>
                     <li>
                         <div class="wrp_top">
-                            <label for="vdesc" class="txt"><span class="ico"><img src="/images/ico_n3.gif" alt="3" /></span>Entry summary</label></label>
-                            <textarea name="vdesc" id="vdesc" /></textarea>
+                            <label for="vdesc" class="txt"><span class="ico"><img src="/images/ico_n3.gif" alt="3" /></span>Entry summary</label>
+                            <textarea name="vdesc" id="vdesc"></textarea>
                         </div>
                     </li>
                     <li>
@@ -86,27 +86,26 @@
                         <span class="wrp_inpt">
                             <input type="text" name="uemail" id="uemail" />
                         </span>
-                        <!-- <a href="#" class="btn_chk_email">중복확인</a> -->
                     </li>
                     <li class="visit">
                         <span class="label txt">6. How many times have you visited Korea?</span>
                         <span class="wrp_radio">
-                            <input type="radio" name="uvisit" id="uvisitN" value="없음" checked="checked" />
+                            <input type="radio" name="uvisit" id="uvisitN" value="none" />
                             <label for="uvisitN" class="radio">N/A</label>
-                            <input type="radio" name="uvisit" id="uvisit1" value="1회" />
+                            <input type="radio" name="uvisit" id="uvisit1" value="1 time" />
                             <label for="uvisit1" class="radio">1 time</label>
-                            <input type="radio" name="uvisit" id="uvisit2" value="2회" />
+                            <input type="radio" name="uvisit" id="uvisit2" value="2 times" />
                             <label for="uvisit2" class="radio">2 time</label>
-                            <input type="radio" name="uvisit" id="uvisit3" value="3회" />
+                            <input type="radio" name="uvisit" id="uvisit3" value="3 times" />
                             <label for="uvisit3" class="radio">3 times</label>
-                            <input type="radio" name="uvisit" id="uvisit4" value="4회 이상" />
+                            <input type="radio" name="uvisit" id="uvisit4" value="more than 4 times" />
                             <label for="uvisit4" class="radio">More than 4 times</label>
                         </span>
                     </li>
                     <li class="visa">
                         <span class="label txt">7. Do you have a valid passport?</span>
                         <span class="wrp_radio passport">
-                            <input type="radio" name="upassport" id="upassport1" value="YES" checked="checked" />
+                            <input type="radio" name="upassport" id="upassport1" value="YES" />
                             <label for="upassport1" class="radio">YES</label>
                             <input type="radio" name="upassport" id="upassport2" value="NO" />
                             <label for="upassport2" class="radio">NO</label>
@@ -115,23 +114,47 @@
                     <li class="visa">
                         <span class="label txt">8. Do you have a visa to visit Korea?</span>
                         <span class="wrp_radio">
-                            <input type="radio" name="uvisa" id="uvisa1" value="YES" checked="checked" />
+                            <input type="radio" name="uvisa" id="uvisa1" value="YES" />
                             <label for="uvisa1" class="radio">YES</label>
                             <input type="radio" name="uvisa" id="uvisa2" value="NO" />
                             <label for="uvisa2" class="radio">NO</label>
-                            <input type="radio" name="uvisa" id="uvisa3" value="무비자 입국가능" />
+                            <input type="radio" name="uvisa" id="uvisa3" value="FREE" />
                             <label for="uvisa3" class="radio none">I am eligible for visa-free entry</label>
                         </span>
                     </li>
                     <li class="visit">
                         <span class="label txt cancel">9. Is there any reason you may be refused entry to Korea?</span>
                         <span class="wrp_radio">
-                            <input type="radio" name="ucancel" id="ucancel1" value="있음" checked="checked" />
+                            <input type="radio" name="ucancel" id="ucancel1" value="can visit" />
                             <label for="ucancel1" class="radio">I am able to visit Korea</label>
-                            <input type="radio" name="ucancel" id="ucancel2" value="없음" />
+                            <input type="radio" name="ucancel" id="ucancel2" value="cannot visit" />
                             <label for="ucancel2" class="radio">I cannot visit Korea</label>
-                            <input type="radio" name="ucancel" id="ucancel3" value="잘 모름" />
+                            <input type="radio" name="ucancel" id="ucancel3" value="Unsure" />
                             <label for="ucancel3" class="radio">Unsure</label>
+                        </span>
+                    </li>
+                    <li class="age">
+                        <span class="label txt">10. Age</span>
+                        <span class="wrp_radio">
+                            <input type="radio" name="uage" id="uage1" value="10 - 19" />
+                            <label for="uage1" class="radio">10 - 19</label>
+                            <input type="radio" name="uage" id="uage2" value="20 - 29" />
+                            <label for="uage2" class="radio">20 - 29</label>
+                            <input type="radio" name="uage" id="uage3" value="30 - 39" />
+                            <label for="uage3" class="radio">30 - 39</label>
+                            <input type="radio" name="uage" id="uage4" value="40 - 49" />
+                            <label for="uage4" class="radio">40 - 49</label>
+                            <input type="radio" name="uage" id="uage5" value="Etc." />
+                            <label for="uage5" class="radio">Etc.</label>
+                        </span>
+                    </li>
+                    <li class="sex">
+                        <span class="label txt">11. Sex</span>
+                        <span class="wrp_radio">
+                            <input type="radio" name="usex" id="usex1" value="Male" />
+                            <label for="usex1" class="radio">Male</label>
+                            <input type="radio" name="usex" id="usex2" value="Female" />
+                            <label for="usex2" class="radio">Female</label>
                         </span>
                     </li>
                 </ul>
@@ -158,226 +181,8 @@
         <img src="/images/gif_loading.gif" alt="uploading...." />
     </div>
 </div>
+
 <script src="/js/jquery-1.12.4.min.js"></script>
-<script>
-(function($){
-    var ufirst = $('#ufirst');
-    var ulast = $('input[name=ulast]');
-    var unation = $('#unation');
-    var ucity = $('#ucity');
-    var ucountry = $('#ucountry');
-    var usns1 = $('#usns1');
-    var usns2 = $('input[name=usns2]');
-    var uemail = $('#uemail');
-    var vurl = $('#vurl');
-    var vfile = $('#vfile');
-    var vname = $('#vname');
-    var vdesc = $('#vdesc');
-    var vorigin = $('#vorigin');
-    var agree = $('#agree');
-
-    var emailRegEx = /^[0-9a-zA-Z]([-_\.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_\.]?[0-9a-zA-Z])*\.[a-zA-Z]{2,3}$/i;
-    var emailFlag = false;
-    var tmpEmail = '';
-
-    $('.wrp_radio').each(function(a){
-        radioUI($(this));
-    });
-
-    uemail.on('blur', function(e){
-        var self = $(this);
-
-        if(self.val() !== ''){
-            if(!emailRegEx.test(self.val())){
-                alert('이메일 형식이 바르지 않습니다.');
-                self.val('').focus();
-                return false;
-            }
-
-            $.ajax({
-                type: 'GET',
-                url: '/checkEmail',
-                data: {uemail: self.val()},
-                dataType: 'json',
-                success: function(data){
-                    alert(data.message);
-                    emailFlag = true;
-                    tmpEmail = self.val();
-                },
-                error: function(err){
-                    alert(err.responseJSON.message);
-                    emailFlag = false;
-                    self.val('').focus();
-                }
-            });
-        }
-    });
-
-    vurl.on('focus', function(e){
-        if(vfile.val() !== ''){
-            var flag = confirm('동영상 URL 또는 파일 업로드 중 한가지 방식만 등록 가능합니다. URL입력시 선택하신 동영상 파일은 초기화 됩니다. URL을 입력 하세겠습니까?');
-
-            if(flag){
-                vfile.remove();
-                vfile = $('<input type="file" name="vfile" id="vfile" title="browse a file" />').appendTo('.area_up');
-            }else{
-                $(this).blur();
-            }
-        }
-    });
-
-    $('.vfile').on('click', function(e){
-        if(vurl.val() !== ''){
-            var flag = confirm('동영상 URL 또는 파일 업로드 중 한가지 방식만 등록 가능합니다. 파일을 선택하시면 입력하신 URL은 초기화 됩니다. 파일을 선택 하시겠습니까?');
-
-            if(flag){
-                vurl.val('');
-                vfile.trigger('click');
-            }
-        }else{
-            vfile.trigger('click');
-        }
-
-        return false;
-    });
-
-    $('.sbm').on('click', function(e){
-        //todo 확장자 제한
-        if(vurl.val() === '' && vfile.val() === ''){
-            alert('동영상 URL을 입력 또는 파일을 선택해 주세요');
-            vurl.focus();
-            return false;
-        }
-
-        if(vfile.val() !== ''){
-            var tmp_arr = vfile.val().split('.'),
-                leng = tmp_arr.length,
-                ext = tmp_arr[leng-1].toLowerCase(),
-                ext_arr = ['mov', 'avi', 'mp4'],
-                ext_leng = ext_arr.length,
-                ext_flag = false;
-
-            for(var i=0; i< ext_leng; i++){
-                if(ext === ext_arr[i]){
-                    ext_flag = true;
-                    break;
-                }
-            }
-
-            if(!ext_flag){
-                alert('동영상 파일은 3MB 이하의 avi, mov, mp4 파일만 가능합니다.');
-                return false;
-            }
-        }
-
-        if(vname.val() === ''){
-            alert('출품명을 입력해 주세요');
-            vname.focus();
-            return false;
-        }
-
-        if(vdesc.val() === ''){
-            alert('동영상 설명을 입력해 주세요');
-            vdesc.focus();
-            return false;
-        }
-
-        if(vorigin.val() === ''){
-            alert('한류 컨텐츠 원제목을 입력해 주세요');
-            vorigin.focus();
-            return false;
-        }
-
-        if(ufirst.val() === ''){
-            alert('이름을 입력해 주세요');
-            ufirst.focus();
-            return false;
-        }
-
-        if(ulast.val() === ''){
-            alert('성을 입력해 주세요');
-            ulast.focus();
-            return false;
-        }
-
-        if(unation.val() === ''){
-            alert('국적을 입력해 주세요');
-            unation.focus();
-            return false;
-        }
-
-        if(ucity.val() === ''){
-            alert('도시를 입력해 주세요');
-            ucity.focus();
-            return false;
-        }
-
-        if(ucountry.val() === ''){
-            alert('주를 입력해 주세요');
-            ucountry.focus();
-            return false;
-        }
-
-        if(usns1.val() === '' && usns2.val() === ''){
-            alert('sns 주소를 최소 1개 이상 입력해 주세요');
-            usns1.focus();
-            return false;
-        }
-
-        if(uemail.val() === ''){
-            alert('이메일을 입력해 주세요');
-            uemail.focus();
-            return false;
-        }else{
-            if(!emailRegEx.test(uemail.val())){
-                alert('이메일 형식이 바르지 않습니다.');
-                uemail.focus();
-                return false;
-            }
-        }
-
-        if(!emailFlag || tmpEmail !== uemail.val()){
-            alert('이메일 중복확인을 해 주세요.');
-            return false;
-        }
-
-        if(!agree.prop('checked')){
-            alert('개인정보 취급 방식에 동의해주세요');
-            agree.focus();
-            return false;
-        }
-
-        //todo indicator 추가
-        $('.indc').show();
-        $('form').submit();
-    });
-
-    function radioUI(scope){
-        var radio = scope.find('label'),
-            input = scope.find('input'),
-            current = null;
-
-        radio.each(function(a){
-            if(input.eq(a).prop('checked')){
-                active($(this));
-            }
-        });
-
-        radio.on('click', function(e){
-            if(current) deactive(current);
-            active($(this));
-        });
-
-        function active(item){
-            item.addClass('on');
-            current = item;
-        }
-
-        function deactive(item){
-            item.removeClass('on');
-        }
-    }
-}(jQuery));
-</script>
+<script src="/js/common.js"></script>
 </body>
 </html>

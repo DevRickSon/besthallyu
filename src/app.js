@@ -6,6 +6,8 @@ import session from 'express-session';
 import cookieParser from 'cookie-parser';
 import url from 'url';
 
+import helmet from 'helmet';
+
 import mongoose from 'mongoose';
 import Board from './models/Board';
 import Admin from './models/Admin';
@@ -16,12 +18,11 @@ import multerS3 from 'multer-s3';
 
 import expressErrorHandler from 'express-error-handler';
 
-//import localConfig from '../localConfig';
 import herokuConfig from '../herokuConfig'
 
 const app = express();
 const port = 8083;
-const S3_BUCKET = 'visitseoul';
+const S3_BUCKET = herokuConfig.bucket;
 
 aws.config.update({
     accessKeyId: herokuConfig.accessKeyId,
@@ -30,6 +31,7 @@ aws.config.update({
 });
 const s3 = new aws.S3();
 
+app.use(helmet());
 app.use(bodyParser.urlencoded({extended:true}));
 app.use(bodyParser.json());
 
@@ -71,59 +73,67 @@ const upload = multer({
     })
 }).single('vfile');
 
-app.get('/', (req, res) => {
-    let context = {
-        status: 'init',
-        message: ''
-    };
-    req.app.render('join', context, (err, html) => {
+const route = express.Router();
+
+
+route.get('/', (req, res) => {
+    req.app.render('join', (err, html) => {
         if(err) throw err;
-        res.end(html);
+        res.send(html);
     });
 });
 
-app.get('/checkEmail', (req, res) => {
-    const { uemail } = req.query;
+app.use('/', route);
 
-    const verify = (email) => {
-        if(!email){
-            return '참여 가능한 이메일 입니다.';
-        }else{
-            throw new Error('이미 참여한 이메일 입니다.');
-        }
-    };
+// app.get('/', (req, res) => {
+//     req.app.render('join', (err, html) => {
+//         if(err) throw err;
+//         res.send(html);
+//     });
+// });
 
-    const respond = (msg) => {
-        res.json({
-            message: msg
-        });
-    };
-
-    const onError = (error) => {
-        res.status(403).json({
-            message: error.message
-        });
-    };
-
-    Board.findOneByEmail(uemail)
-          .then(verify)
-          .then(respond)
-          .catch(onError);
-});
+// app.get('/checkEmail', (req, res) => {
+//     const { uemail } = req.query;
+//
+//     const verify = (email) => {
+//         if(!email){
+//             return '참여 가능한 이메일 입니다.';
+//         }else{
+//             throw new Error('이미 참여한 이메일 입니다.');
+//         }
+//     };
+//
+//     const respond = (msg) => {
+//         res.json({
+//             message: msg
+//         });
+//     };
+//
+//     const onError = (error) => {
+//         res.status(403).json({
+//             message: error.message
+//         });
+//     };
+//
+//     Board.findOneByEmail(uemail)
+//           .then(verify)
+//           .then(respond)
+//           .catch(onError);
+// });
 
 app.post('/registerVideo', (req, res) => {
     upload(req, res, (err) => {
         if(err){
             return req.app.render('error', {message: '3MB 이하의 동영상 파일만 업로드 가능합니다'}, (err, html) => {
                 if(err) throw err;
-                res.end(html);
+                res.send(html);
             });
         }
 
-        let { vurl, vname, vdesc, vorigin, ufirst, ulast, unation, ucity, ucountry, usns1, usns2, uemail, uvisit, upassport, uvisa, ucancel } = req.body;
+        let { vurl, vname, vdesc, vorigin, ufirst, ulast, unation, ucity, ucountry, usns1, usns2, uemail, uvisit, upassport, uvisa, ucancel, uage, usex } = req.body;
         let uname = ufirst + ' ' + ulast;
         let usns = usns1;
-        if(typeof usns2 !== 'undefined') usns += ', ' + usns2
+        if(typeof usns2 !== '') usns += ', ' + usns2
 
         let file = req.file;
         let vfile = '';
@@ -143,7 +153,7 @@ app.post('/registerVideo', (req, res) => {
             console.error(err);
         }
 
-        Board.create(vurl, vfile, vname, vdesc, vorigin, uname, unation, ucity, ucountry, usns, uemail, uvisit, upassport, uvisa, ucancel)
+        Board.create(vurl, vfile, vname, vdesc, vorigin, uname, unation, ucity, ucountry, usns, uemail, uvisit, upassport, uvisa, ucancel, uage, usex)
              .then(respond)
              .catch(onError);
     });
@@ -152,7 +162,7 @@ app.post('/registerVideo', (req, res) => {
 app.get('/join/success', (req, res) => {
     return req.app.render('success', (err, html) => {
         if(err) throw err;
-        res.end(html);
+        res.send(html);
     });
 });
 
@@ -203,7 +213,7 @@ app.get('/admin/lists/:page', (req, res) => {
         },(err, html) => {
             if(err) throw err;
 
-            res.end(html);
+            res.send(html);
         });
     };
 
@@ -225,7 +235,7 @@ app.get('/admin/lists/:page', (req, res) => {
 app.get('/admin', (req, res) => {
     req.app.render('login', (err, html) => {
         if(err) throw err;
-        res.end(html);
+        res.send(html);
     });
 });
 
@@ -258,7 +268,7 @@ app.post('/admin/login', (req, res) => {
     const onError = (error) => {
         req.app.render('error', {message: error.message}, (err, html) => {
             if(err) throw err;
-            res.end(html);
+            res.send(html);
         });
     };
 
@@ -280,7 +290,7 @@ app.get('/admin/logout', (req, res) => {
     }
 });
 
-//todo error-handler
+//todo
 //인피니티 라이브
 
 // app.post('/admin/account', (req, res) => {

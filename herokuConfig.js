@@ -4,5 +4,6 @@ module.exports = {
     sid: 'keyOfvsSeoul',
     accessKeyId: 'AKIAJ72VSZFZURYONESA',
     secretAccessKey: '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',
-    region: 'ap-northeast-2'
+    region: 'ap-northeast-2',
+    bucket: 'visitseoul'
 };
