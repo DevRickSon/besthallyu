@@ -31,7 +31,7 @@ _awsSdk2.default.config.update({
 var s3 = new _awsSdk2.default.S3();
 var S3_BUCKET = _herokuConfig2.default.bucket;
 
-var maxFileSize = 3 * 1024 * 1024;
+var maxFileSize = 50 * 1024 * 1024;
 var upload = (0, _multer2.default)({
     limits: { fileSize: maxFileSize },
     storage: (0, _multerS2.default)({

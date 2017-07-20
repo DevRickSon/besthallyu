@@ -14,7 +14,7 @@ aws.config.update({
 const s3 = new aws.S3();
 const S3_BUCKET = herokuConfig.bucket;
 
-const maxFileSize = 3 * 1024 * 1024;
+const maxFileSize = 50 * 1024 * 1024;
 const upload = multer({
     limits: {fileSize: maxFileSize},
     storage: multerS3({
