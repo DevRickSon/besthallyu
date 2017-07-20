@@ -34,6 +34,8 @@ var Board = new Schema({
     upassport: String,
     uvisa: String,
     ucancel: String,
+    uage: String,
+    usex: String,
     date: {
         type: Date,
         default: Date.now
@@ -41,7 +43,7 @@ var Board = new Schema({
 });
 
 //추가 요소
-Board.statics.create = function (vurl, vfile, vname, vdesc, vorigin, uname, unation, ucity, ucountry, usns, uemail, uvisit, upassport, uvisa, ucancel) {
+Board.statics.create = function (vurl, vfile, vname, vdesc, vorigin, uname, unation, ucity, ucountry, usns, uemail, uvisit, upassport, uvisa, ucancel, uage, usex) {
     var board = new this({
         vurl: vurl,
         vfile: vfile,
@@ -57,7 +59,9 @@ Board.statics.create = function (vurl, vfile, vname, vdesc, vorigin, uname, unat
         uvisit: uvisit,
         upassport: upassport,
         uvisa: uvisa,
-        ucancel: ucancel
+        ucancel: ucancel,
+        uage: uage,
+        usex: usex
     });
 
     return board.save();
