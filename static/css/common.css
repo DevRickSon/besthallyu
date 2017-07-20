@@ -195,3 +195,7 @@ body.admin{background:#fff}
 .frm_search{padding-top:20px;text-align:center}
 
 .err{color:#cc001e}
+
+/* 404 */
+body.err404{background:#fff}
+body.err404 .wrp_success a{display:inline-block;width:auto;padding:3px 10px;margin-top:10px;border:1px solid #666;background:#f9f9f9}

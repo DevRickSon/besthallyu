@@ -11,14 +11,15 @@ import router from './routes';
 
 import mongoose from 'mongoose';
 
-import expressErrorHandler from 'express-error-handler';
-
 import herokuConfig from '../herokuConfig';
 
 const app = express();
 const port = 8083;
 
 app.use(helmet());
+app.use(helmet.noCache());
+app.use(helmet.frameguard());
+
 app.use(bodyParser.urlencoded({extended:true}));
 app.use(bodyParser.json());
 
@@ -47,14 +48,13 @@ app.use('/', express.static(path.join(__dirname, '../static')));
 
 app.use('/', router);
 
-const errorHandler = expressErrorHandler({
-    static: {
-        '404': path.join(__dirname, '../views/404.html')
-    }
+app.use((req, res, next) => {
+    req.app.render('error404', (err, html) => {
+        if(err) throw err;
+        res.status(404);
+        res.send(html);
+    });
 });
-
-app.use(expressErrorHandler.httpError(404));
-app.use(errorHandler);
 
 app.listen(process.env.PORT || port, () => {
     console.log(`Server is running on port ${port}.`);

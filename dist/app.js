@@ -40,10 +40,6 @@ var _mongoose = require('mongoose');
 
 var _mongoose2 = _interopRequireDefault(_mongoose);
 
-var _expressErrorHandler = require('express-error-handler');
-
-var _expressErrorHandler2 = _interopRequireDefault(_expressErrorHandler);
-
 var _herokuConfig = require('../herokuConfig');
 
 var _herokuConfig2 = _interopRequireDefault(_herokuConfig);
@@ -54,6 +50,9 @@ var app = (0, _express2.default)();
 var port = 8083;
 
 app.use((0, _helmet2.default)());
+app.use(_helmet2.default.noCache());
+app.use(_helmet2.default.frameguard());
+
 app.use(_bodyParser2.default.urlencoded({ extended: true }));
 app.use(_bodyParser2.default.json());
 
@@ -82,14 +81,13 @@ app.use('/', _express2.default.static(_path2.default.join(__dirname, '../static'
 
 app.use('/', _routes2.default);
 
-var errorHandler = (0, _expressErrorHandler2.default)({
-    static: {
-        '404': _path2.default.join(__dirname, '../views/404.html')
-    }
+app.use(function (req, res, next) {
+    req.app.render('error404', function (err, html) {
+        if (err) throw err;
+        res.status(404);
+        res.send(html);
+    });
 });
-
-app.use(_expressErrorHandler2.default.httpError(404));
-app.use(errorHandler);
 
 app.listen(process.env.PORT || port, function () {
     console.log('Server is running on port ' + port + '.');

@@ -27,6 +27,7 @@
     "express": "^4.15.3",
     "express-error-handler": "^1.1.0",
     "express-session": "^1.15.3",
+    "forever": "^0.15.3",
     "helmet": "^3.6.1",
     "mongoose": "^4.11.0",
     "mongoose-auto-increment": "^5.0.1",
