@@ -1,9 +1,9 @@
 module.exports = {
-    db: 'mongodb://rickson:rick031952@ds141082.mlab.com:41082/heroku_8034t4mg',
-    secret: 'sEcRetkEyOfVistSeOul',
-    sid: 'keyOfvsSeoul',
-    accessKeyId: 'AKIAJ72VSZFZURYONESA',
-    secretAccessKey: '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',
+    db: 'mongodb://rickSon:wjdgh031952!@ds037622.mlab.com:37622/heroku_gmdzqqw3',
+    secret: 'sEcReTkeyOfVistseOuL',
+    sid: 'KeyOfvsSeoul',
+    accessKeyId: 'AKIAIK4DIV74OJLPSD2A',
+    secretAccessKey: '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',
     region: 'ap-northeast-2',
-    bucket: 'visitseoul'
+    bucket: 'besthallyu'
 };
